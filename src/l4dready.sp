@@ -1280,11 +1280,11 @@ DrawReadyPanelList()
 	}
 	
 	new String:versionInfo[128];
-	Format(versionInfo, 128, "Downtown1's RUP Mod v%s", READY_VERSION);
+	Format(versionInfo, 128, "RUP Mod v%s", READY_VERSION);
 	DrawPanelText(panel, versionInfo);
 	
 #if LEAGUE_ADD_NOTICE
-	DrawPanelText(panel,     "ESL Frustian's CFG");
+	DrawPanelText(panel,     "Rotoblin CFG v0.5.0-ESL");
 #endif
 	
 	for (i = 1; i < L4D_MAXCLIENTS_PLUS1; i++) 

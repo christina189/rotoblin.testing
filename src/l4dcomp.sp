@@ -63,7 +63,7 @@ public OnPluginStart()
 	CPenabled = CreateConVar("l4d_comp_enable", "0", "Enable Comp Plugin",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 	FKenabled = CreateConVar("l4d_kit_disable", "1", "Enable First Aid Kit Disable",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 	FKFenabled = CreateConVar("l4d_finale_kit_enable", "1", "Spawn 4 first aid kits on finale",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
-	TDFenabled = CreateConVar("l4d_finale_tier2_enable", "3", "Spawn Tier 2 in finales.  0:No tier 2, 1:All tier 2 spawns, 2:Jerkstore mode, only one AS, and one AR, 3:one AS&AR in the saferoom, another pair at finale button",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
+	TDFenabled = CreateConVar("l4d_finale_tier2_enable", "0", "Spawn Tier 2 in finales.  0:No tier 2, 1:All tier 2 spawns, 2:Jerkstore mode, only one AS, and one AR, 3:one AS&AR in the saferoom, another pair at finale button",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 	TDenabled = CreateConVar("l4d_tier2_disable", "1", "Enable Tier 2 Disable",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 	TFenabled = CreateConVar("l4d_tankfix", "1", "Enable Tank Fix",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 	DPenabled = CreateConVar("l4d_dupepillfix", "1", "Enable Duplicate Pill Fix",FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);

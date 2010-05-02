@@ -32,15 +32,8 @@
 #ifndef _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_
 #define _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_
 
-#ifdef _DEBUG
-#define L4D_DEBUG_LOG(...) g_pSM->LogMessage(myself, __VA_ARGS__)
-#else
+//#define L4D_DEBUG_LOG(...) g_pSM->LogMessage(myself, __VA_ARGS__)
 #define L4D_DEBUG_LOG(...)
-#endif
-
-//Makefile and .vcproj defines these respectively according to the build
-//#define TARGET_L4D2 1
-//#define TARGET_L4D 0
 
 /**
  * @file extension.h
@@ -49,7 +42,7 @@
 
 #include "smsdk_ext.h"
 #include <IBinTools.h>
-#include <iserver.h>
+#include <IServer.h>
 #include <convar.h>
 #include <icvar.h>
 #include <icommandline.h>
@@ -142,20 +135,10 @@ extern IForward *g_pFwdOnSpawnTank;
 extern IForward *g_pFwdOnSpawnWitch;
 extern IForward *g_pFwdOnClearTeamScores;
 extern IForward *g_pFwdOnSetCampaignScores;
-extern IForward *g_pFwdOnFirstSurvivorLeftSafeArea;
 
 extern IBinTools *g_pBinTools;
 extern IServer *g_pServer; //pointer to CBaseServer
 extern IGameConfig *g_pGameConf;
 extern IGameConfig *g_pGameConfSDKTools;
-
-/* Interfaces from engine or gamedll */
-extern IServerGameEnts *gameents;
-extern ICvar *icvar;
-extern IServer *iserver;
-extern CGlobalVars *gpGlobals;
-/* Interfaces from SourceMod */
-
-#include "compat_wrappers.h"
 
 #endif // _INCLUDE_SOURCEMOD_EXTENSION_PROPER_H_

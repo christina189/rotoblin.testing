@@ -34,24 +34,17 @@
 
 namespace Detours
 {
-
-/* CTerrorGameRules::ClearTeamScores in L4D2 has a bool parameter -XBetaAlpha		*/
-
-	void ClearTeamScores::OnClearTeamScores(CLEAR_TEAM_SCORES_ARG)
+	//void ClearTeamScores::OnClearTeamScores(bool b)
+	void ClearTeamScores::OnClearTeamScores()
 	{
-#if TARGET_L4D1
-		bool b = false;
-#else
-		bool b = newCampaign;
-#endif
-
-		L4D_DEBUG_LOG("CTerrorGameRules::ClearTeamScores has been called, bool=%d", b);
+		//L4D_DEBUG_LOG("Director::ClearTeamScores has been called, campaign=%d", b);
+		L4D_DEBUG_LOG("CTerrorGameRules::ClearTeamScores has been called");
 
 		cell_t result = Pl_Continue;
 		if(g_pFwdOnClearTeamScores)
 		{
 			L4D_DEBUG_LOG("L4D_OnClearTeamScores forward has been sent out");
-			g_pFwdOnClearTeamScores->PushCell(static_cast<cell_t>(b));
+//			g_pFwdOnClearTeamScores->PushCell(static_cast<cell_t>(clearCampaignScores));
 			g_pFwdOnClearTeamScores->Execute(&result);
 		}
 
@@ -62,7 +55,7 @@ namespace Detours
 		}
 		else
 		{
-			(this->*(GetTrampoline()))(b);
+			(this->*(GetTrampoline()))();
 			return;
 		}
 	}

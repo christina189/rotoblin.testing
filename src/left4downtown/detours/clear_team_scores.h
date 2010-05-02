@@ -34,27 +34,22 @@
 
 #include "detour_template.h"
 
-#if TARGET_L4D1
-#define CLEAR_TEAM_SCORES_ARG
-#else
-#define CLEAR_TEAM_SCORES_ARG bool newCampaign
-#endif
-
 namespace Detours {
 
 class ClearTeamScores;
-
-typedef void (ClearTeamScores::*ClearTeamScoresFunc)(CLEAR_TEAM_SCORES_ARG);
+//typedef void (ClearTeamScores::*ClearTeamScoresFunc)(bool);
+typedef void (ClearTeamScores::*ClearTeamScoresFunc)();
 
 class ClearTeamScores : public DetourTemplate<ClearTeamScoresFunc, ClearTeamScores>
 {
 private: //note: implementation of DetourTemplate abstracts
 
-	void OnClearTeamScores(bool);
+	void OnClearTeamScores();
 
 	// get the signature name (i.e. "ClearTeamScores") from the game conf
 	virtual const char *GetSignatureName()
 	{
+		//return "ClearTeamScores_Director";
 		return "ClearTeamScores";
 	}
 

@@ -47,29 +47,22 @@
 #include "detours/spawn_tank.h"
 #include "detours/clear_team_scores.h"
 #include "detours/set_campaign_scores.h"
-#include "detours/server_player_counts.h"
-#include "detours/first_survivor_left_safe_area.h"
 
-#if TARGET_L4D
-#define GAMECONFIG_FILE "left4downtown.l4d"
-#else
-#define GAMECONFIG_FILE "left4downtown.l4d2"
-#endif
+#define GAMECONFIG_FILE "left4downtown"
 
 Left4Downtown g_Left4DowntownTools;		/**< Global singleton for extension's main interface */
 IGameConfig *g_pGameConf = NULL;
 IGameConfig *g_pGameConfSDKTools = NULL;
 IBinTools *g_pBinTools = NULL;
 IServer *g_pServer = NULL; //ptr to CBaseServer
+//BossSpawns *g_pBossSpawns = NULL;
+//Detours::SpawnTank *g_pSpawnTankDetour = NULL;
 ISDKTools *g_pSDKTools = NULL;
-IServerGameEnts *gameents = NULL;
-CGlobalVars *gpGlobals;
 
 IForward *g_pFwdOnSpawnTank = NULL;
 IForward *g_pFwdOnSpawnWitch = NULL;
 IForward *g_pFwdOnClearTeamScores = NULL;
 IForward *g_pFwdOnSetCampaignScores = NULL;
-IForward *g_pFwdOnFirstSurvivorLeftSafeArea = NULL;
 
 ICvar *icvar = NULL;
 SMEXT_LINK(&g_Left4DowntownTools);
@@ -78,6 +71,7 @@ extern sp_nativeinfo_t g_L4DoNatives[];
 
 ConVar g_Version("left4downtown_version", SMEXT_CONF_VERSION, FCVAR_SPONLY|FCVAR_NOTIFY, "Left 4 Downtown Extension Version");
 ConVar g_MaxPlayers("l4d_maxplayers", "-1", FCVAR_SPONLY|FCVAR_NOTIFY, "Overrides maxplayers with this value");
+//ConVar *g_MaxPlayers;//("l4d_maxplayers", "-1", FCVAR_SPONLY|FCVAR_NOTIFY, "Overrides maxplayers with this value");
 PatchManager g_PatchManager;
 
 /**
@@ -87,23 +81,12 @@ PatchManager g_PatchManager;
 
 bool Left4Downtown::SDK_OnLoad(char *error, size_t maxlength, bool late)
 {
-
-#if TARGET_L4D
 	//only load extension for l4d
 	if (strcmp(g_pSM->GetGameFolderName(), "left4dead") != 0)
 	{
-		UTIL_Format(error, maxlength, "Cannot Load Left 4 Downtown Ext on mods other than L4D1");
+		UTIL_Format(error, maxlength, "Cannot Load Left 4 Downtown Ext on mods other than L4D");
 		return false;
 	}
-#elif TARGET_L4D2
-	//only load extension for l4d2
-	if (strcmp(g_pSM->GetGameFolderName(), "left4dead2") != 0)
-	{
-		UTIL_Format(error, maxlength, "Cannot Load Left 4 Downtown Ext on mods other than L4D2");
-		return false;
-	}
-#endif
-
 
 	//load sigscans and offsets, etc from our gamedata file
 	char conf_error[255] = "";
@@ -128,11 +111,13 @@ bool Left4Downtown::SDK_OnLoad(char *error, size_t maxlength, bool late)
 	g_pFwdOnSpawnWitch = forwards->CreateForward("L4D_OnSpawnWitch", ET_Event, 2, /*types*/NULL, Param_Array, Param_Array);
 	g_pFwdOnClearTeamScores = forwards->CreateForward("L4D_OnClearTeamScores", ET_Event, 1, /*types*/NULL, Param_Cell);
 	g_pFwdOnSetCampaignScores = forwards->CreateForward("L4D_OnSetCampaignScores", ET_Event, 2, /*types*/NULL, Param_CellByRef, Param_CellByRef);
-	g_pFwdOnFirstSurvivorLeftSafeArea = forwards->CreateForward("L4D_OnFirstSurvivorLeftSafeArea", ET_Event, 1, /*types*/NULL, Param_Cell);
 
 	playerhelpers->AddClientListener(&g_Left4DowntownTools);
 
+	//BossSpawns::Init(g_pSM->GetScriptingEngine(), g_pGameConf);
 	Detour::Init(g_pSM->GetScriptingEngine(), g_pGameConf);
+
+	//g_MaxPlayers = NULL;
 
 	return true;
 }
@@ -144,16 +129,12 @@ void Left4Downtown::SDK_OnAllLoaded()
 
 	if (!g_pBinTools || !g_pSDKTools)
 	{
-		L4D_DEBUG_LOG("Failed to loan bintools or failed to load sdktools");
 		return;
 	}
 
 	IServer *server = g_pSDKTools->GetIServer();
 	L4D_DEBUG_LOG("Address of IServer is %p", server);
-	//reading out server->GetName() we consistently seem to get (the same?) 
-	//garbage characters. this is possibly causing a crash on windows servers
-	//when a player connects. so lets not read the server name :(
-	//L4D_DEBUG_LOG("Server name is %s", server->GetName());
+	L4D_DEBUG_LOG("Server name is %s", server->GetName());
 	g_pServer = server;
 
 	InitializeValveGlobals();
@@ -164,14 +145,9 @@ void Left4Downtown::SDK_OnAllLoaded()
 	*/
 	g_MaxPlayers.InstallChangeCallback(::OnMaxPlayersChanged);
 
+
 	/*
 	read the +-maxplayers from command line
-	*/
-
-	/*commenting out the code below
-	seems to not make it crash during connection to my NFO
-	
-	START HERE
 	*/
 	ICommandLine *cmdLine = CommandLine_Tier0();
 	int maxplayers = -1;
@@ -183,27 +159,26 @@ void Left4Downtown::SDK_OnAllLoaded()
 	if(maxplayers == -1) 
 	{
 		maxplayers = cmdLine->ParmValue("-maxplayers", -1);
+		L4D_DEBUG_LOG("Command line -maxplayers is: %d", maxplayers);
 	}
-	/*
-	end here
-	*/
 	PlayerSlots::MaxPlayers = maxplayers;
 
 	/*
 	detour the witch/spawn spawns
 	*/
-	//automatically will unregister/cleanup themselves when the ext is unloaded
+	//g_pBossSpawns = new BossSpawns();
+	//g_pBossSpawns->Patch();
+	//g_pSpawnTankDetour = new Detours::SpawnTank();
+	//g_pSpawnTankDetour->Patch();
 
+	//automatically will unregister/cleanup themselves when the ext is unloaded
+	//g_PatchManager.Register(new Detours::SpawnTank());
 	g_PatchManager.Register(new AutoPatch<Detours::SpawnTank>());
 	g_PatchManager.Register(new AutoPatch<Detours::SpawnWitch>());
 	g_PatchManager.Register(new AutoPatch<Detours::ClearTeamScores>());
 	g_PatchManager.Register(new AutoPatch<Detours::SetCampaignScores>());
 
-#if TARGET_L4D2
-	g_PatchManager.Register(new AutoPatch<Detours::FirstSurvivorLeftSafeArea>());
-#endif
-
-	g_PatchManager.Register(new AutoPatch<Detours::ServerPlayerCounts>());
+	//g_PatchManager.Register(new Detours::SpawnTank());
 }
 
 void Left4Downtown::SDK_OnUnload()
@@ -218,11 +193,15 @@ void Left4Downtown::SDK_OnUnload()
 
 	g_PatchManager.UnregisterAll();
 
+	//remove boss spawns detours
+	//delete g_pBossSpawns;
+	//delete g_pSpawnTankDetour;
+
 	forwards->ReleaseForward(g_pFwdOnSpawnTank);
 	forwards->ReleaseForward(g_pFwdOnSpawnWitch);
 	forwards->ReleaseForward(g_pFwdOnClearTeamScores);
 	forwards->ReleaseForward(g_pFwdOnSetCampaignScores);
-	forwards->ReleaseForward(g_pFwdOnFirstSurvivorLeftSafeArea);
+
 }
 
 class BaseAccessor : public IConCommandBaseAccessor
@@ -243,8 +222,6 @@ bool Left4Downtown::SDK_OnMetamodLoad(SourceMM::ISmmAPI *ismm, char *error, size
 	g_pCVar = icvar;
 	ConVar_Register(0, &s_BaseAccessor);
 
-	GET_V_IFACE_ANY(GetServerFactory, gameents, IServerGameEnts, INTERFACEVERSION_SERVERGAMEENTS);
-	gpGlobals = ismm->GetCGlobals();
 
 	return true;
 }
@@ -296,4 +273,8 @@ void Left4Downtown::OnServerActivated(int max_clients)
 		}
 	}
 #endif
+
+	//g_MaxPlayers = new ConVar("l4d_maxplayers", "-1", FCVAR_SPONLY|FCVAR_NOTIFY, "Overrides maxplayers with this value",
+	//	true, -1.0, true, max_clients, ::OnMaxPlayersChanged);
 }
+

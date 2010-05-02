@@ -73,9 +73,9 @@ private:
 	unsigned char *signature;
 
 	const char *signatureName;
-	patch_t *restore;
 	unsigned char *trampoline;
 
+	patch_t *restore;
 
 	static ISourcePawnEngine *spengine;
 

@@ -2,17 +2,18 @@
 
 #include <sourcemod>
 #include <sdktools>
-
-//set to 1 to require left4downtown
-//set to 0 to just work without it (eg check gameconf)
-#define USE_NATIVES 1
-
-#if USE_NATIVES
 #include "left4downtown.inc"
-#endif
 
 #define TEST_DEBUG 1
 #define TEST_DEBUG_LOG 0
+
+
+/*
+* do not use these natives in your own plugins,
+* they are for testing only and probably dont work
+*/
+//native L4D_SetPaused(bool:paused);
+//native L4D_ClearReservationStatus();
 
 new Handle:gConf;
 
@@ -21,121 +22,47 @@ public Plugin:myinfo =
 	name = "L4D Downtown's Extension Test",
 	author = "Downtown1",
 	description = "Ensures functions/offsets are valid and provides some commands to call into natives directly",
-	version = "1.0.0.6",
+	version = "1.0.0.5",
 	url = "<- URL ->"
 }
 
 new Handle:cvarBlockTanks = INVALID_HANDLE;
 new Handle:cvarBlockWitches = INVALID_HANDLE;
 new Handle:cvarSetCampaignScores = INVALID_HANDLE;
-new Handle:cvarFirstSurvivorLeftSafeArea = INVALID_HANDLE;
-
-#define GAMECONFIG_FILE "left4downtown.l4d2"
-
-stock L4D_SetRoundEndTime(Float:endTime)
-{
-	static bool:init = false;
-	static Handle:func = INVALID_HANDLE;
-	
-	if(!init)
-	{
-		new Handle:conf = LoadGameConfigFile(GAMECONFIG_FILE);
-		if(conf == INVALID_HANDLE)
-		{
-			LogError("Could not load gamedata/%s.txt", GAMECONFIG_FILE);
-			DebugPrintToAll("Could not load gamedata/%s.txt", GAMECONFIG_FILE);
-		}
-		
-		StartPrepSDKCall(SDKCall_GameRules);
-		new bool:readConf = PrepSDKCall_SetFromConf(conf, SDKConf_Signature, "CTerrorGameRules_SetRoundEndTime");
-		if(!readConf)
-		{
-			ThrowError("Failed to read function from game configuration file");
-		}
-		PrepSDKCall_AddParameter(SDKType_Float, SDKPass_Plain);
-		func = EndPrepSDKCall();
-		
-		if(func == INVALID_HANDLE)
-		{
-			ThrowError("Failed to end prep sdk call");
-		}
-		
-		init = true;
-	}
-
-	SDKCall(func, endTime);
-	DebugPrintToAll("CTerrorGameRules::SetRoundTime(%f)", endTime);
-}
-
-
-stock L4D_ResetRoundNumber()
-{
-	static bool:init = false;
-	static Handle:func = INVALID_HANDLE;
-	
-	if(!init)
-	{
-		new Handle:conf = LoadGameConfigFile(GAMECONFIG_FILE);
-		if(conf == INVALID_HANDLE)
-		{
-			LogError("Could not load gamedata/%s.txt", GAMECONFIG_FILE);
-			DebugPrintToAll("Could not load gamedata/%s.txt", GAMECONFIG_FILE);
-		}
-		
-		StartPrepSDKCall(SDKCall_GameRules);
-		new bool:readConf = PrepSDKCall_SetFromConf(conf, SDKConf_Signature, "CTerrorGameRules_ResetRoundNumber");
-		if(!readConf)
-		{
-			ThrowError("Failed to read function from game configuration file");
-		}
-		func = EndPrepSDKCall();
-		
-		if(func == INVALID_HANDLE)
-		{
-			ThrowError("Failed to end prep sdk call");
-		}
-		
-		init = true;
-	}
-
-	SDKCall(func);
-	DebugPrintToAll("CTerrorGameRules::ResetRoundNumber()");
-}
-
-
 
 public OnPluginStart()
 {
-	gConf = LoadGameConfigFile(GAMECONFIG_FILE);
-	if(gConf == INVALID_HANDLE) 
+	gConf = LoadGameConfigFile("left4downtown");
+	if(gConf == INVALID_HANDLE)
 	{
-		DebugPrintToAll("Could not load gamedata/%s.txt", GAMECONFIG_FILE);
+		DebugPrintToAll("Could not load gamedata/left4downtown.txt");
 	}
 	
 	SearchForOffset("TheDirector"); //fails on Linux
+	SearchForOffset("IVEngineServer");  //fails on Linux
 	SearchForOffset("ValveRejectServerFullFirst");
-	
-	SearchForFunction("GetTeamScore");
-	SearchForFunction("SetCampaignScores");
-	SearchForFunction("SetReservationCookie");
-	SearchForFunction("TakeOverBot");
-	SearchForFunction("SetHumanSpec");
-	
-	SearchForFunction("CDirectorScavengeMode_OnBeginRoundSetupTime");
-	SearchForFunction("CTerrorGameRules_ResetRoundNumber");
-	SearchForFunction("CTerrorGameRules_SetRoundEndTime");
-	SearchForFunction("CDirector_AreWanderersAllowed");
-	SearchForFunction("DirectorMusicBanks_OnRoundStart");
-	
+	SearchForOffset("ClearTeamScore_A");
+	SearchForOffset("ClearTeamScore_B");
+	SearchForOffset("IsReserved");
 	
 	SearchForFunction("TheDirector"); //fails on Windows
+	SearchForFunction("IVEngineServer"); //fails on Windows
+	SearchForFunction("SetNextMission");
+	SearchForFunction("SelectModelByPopulation");
 	SearchForFunction("RestartScenarioFromVote");
-	
-	SearchForFunction("Rematch");
-	
 	SearchForFunction("SpawnTank");
 	SearchForFunction("SpawnWitch");
-	SearchForFunction("OnFirstSurvivorLeftSafeArea");
+//	SearchForFunction("OnMissionStart");
+	SearchForFunction("OnServerShutdown");
+	SearchForFunction("ClearReservationStatus");
+	SearchForFunction("SetReservationCookie");
+	SearchForFunction("MPGameModeChangedConVar");
+	SearchForFunction("IsReserved");
+	SearchForFunction("TakeOverBot");
+	SearchForFunction("SetHumanSpec");
+	SearchForFunction("SetCampaignScores");
+	SearchForFunction("ClearTeamScores");
+	SearchForFunction("GetTeamScore");
 	
 	/*
 	* These searches will fail when slots are patched
@@ -143,89 +70,20 @@ public OnPluginStart()
 	SearchForFunction("ConnectClientLobbyCheck");
 	SearchForFunction("HumanPlayerLimitReached");
 	SearchForFunction("GetMaxHumanPlayers");
-	
-	SearchForFunction("GetMasterServerPlayerCounts");
 
 	//////
-
-	RegConsoleCmd("sm_brst", Command_BeginRoundSetupTime);
-	RegConsoleCmd("sm_rrn", Command_ResetRoundNumber);
-	RegConsoleCmd("sm_sret", Command_SetRoundEndTime);
-	RegConsoleCmd("sm_sig", Command_FindSig);
-	
 	RegConsoleCmd("sm_ir", Command_IsReserved);
+	RegConsoleCmd("sm_setpaused", Command_SetPaused);
+	RegConsoleCmd("sm_gcs", Command_GetCampaignScores);
+	RegConsoleCmd("sm_rs", Command_RestartScenario);
 	RegConsoleCmd("sm_rsfv", Command_RestartScenarioFromVote);
-	RegConsoleCmd("sm_ur", Command_Unreserve);
-	
+	RegConsoleCmd("sm_crs", Command_ClearReservationStatus);
 
 	cvarBlockTanks = CreateConVar("l4do_block_tanks", "0", "Disable ZombieManager::SpawnTank", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 	cvarBlockWitches = CreateConVar("l4do_block_witches", "0", "Disable ZombieManager::SpawnWitch", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 	cvarSetCampaignScores = CreateConVar("l4do_set_campaign_scores", "0", "Override campaign score if non-0", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
 
-	cvarFirstSurvivorLeftSafeArea = CreateConVar("l4do_versus_round_started", "0", "Block versus round from starting if non-0", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_NOTIFY);
-}
 
-public Action:Command_BeginRoundSetupTime(client, args)
-{
-	
-	L4D_ScavengeBeginRoundSetupTime()
-	
-	return Plugin_Handled;
-}
-
-
-public Action:Command_ResetRoundNumber(client, args)
-{
-	
-	L4D_ResetRoundNumber();
-	
-	return Plugin_Handled;
-}
-
-
-
-public Action:Command_SetRoundEndTime(client, args)
-{
-	if (args < 1)
-	{
-		ReplyToCommand(client, "[SM] Error: Specify a round end time");
-		return Plugin_Handled;
-	}
-	
-	decl String:functionName[256];
-	GetCmdArg(1, functionName, sizeof(functionName));
-	new Float:time = StringToFloat(functionName);
-	
-	L4D_SetRoundEndTime(time);
-	
-	return Plugin_Handled;
-}
-
-
-public Action:Command_FindSig(client, args)
-{
-	/* 
-	* DOES NOT ACTUALLY WORK :(
-	* 
-	*/
-	if (args < 1)
-	{
-		ReplyToCommand(client, "[SM] Error: Specify a signature");
-		return Plugin_Handled;
-	}
-	
-	decl String:functionName[256];
-	GetCmdArg(1, functionName, sizeof(functionName));
-	new len = strlen(functionName);
-	
-	StartPrepSDKCall(SDKCall_Static);
-	if(PrepSDKCall_SetSignature(SDKLibrary_Server, functionName, len)) {
-		DebugPrintToAll("Signature '%s' initialized.", functionName);
-	} else {
-		DebugPrintToAll("Signature '%s' NOT FOUND.", functionName);
-	}
-	
-	return Plugin_Handled;
 }
 
 public Action:L4D_OnSpawnTank(const Float:vector[3], const Float:qangle[3])
@@ -260,14 +118,24 @@ public Action:L4D_OnSpawnWitch(const Float:vector[3], const Float:qangle[3])
 	}
 }
 
-public Action:L4D_OnClearTeamScores(bool:newCampaign)
+public OnMapStart()
 {
-	DebugPrintToAll("OnClearTeamScores(newCampaign=%d)", newCampaign); 
-		
+	//CreateTimer(0.1, Timer_GetCampaignScores, _);
+}
+
+public Action:L4D_OnClearTeamScores()
+{
+	DebugPrintToAll("OnClearTeamScores()"); 
+	
+	CreateTimer(0.1, Timer_GetCampaignScores, _);
+	
 	return Plugin_Continue;
 }
 
-
+public Action:Timer_GetCampaignScores(Handle:timer)
+{
+	Command_GetCampaignScores(0,0);
+}
 
 public Action:L4D_OnSetCampaignScores(&scoreA, &scoreB)
 {
@@ -280,55 +148,64 @@ public Action:L4D_OnSetCampaignScores(&scoreA, &scoreB)
 	}
 }
 
-public Action:L4D_OnFirstSurvivorLeftSafeArea(client)
-{
-	DebugPrintToAll("OnFirstSurvivorLeftSafeArea(client=%d)", client); 
-	
-	if(GetConVarInt(cvarFirstSurvivorLeftSafeArea)) 
-	{
-		DebugPrintToAll("Blocking OnFirstSurvivorLeftSafeArea...");
-		return Plugin_Handled;
-	}
-	
-	return Plugin_Continue;
-}
-
-public OnMapStart()
-{
-	//CreateTimer(0.1, Timer_GetCampaignScores, _);
-}
-
-
 public Action:Command_IsReserved(client, args)
 {
-#if USE_NATIVES
-	//new bool:res = L4D_LobbyIsReserved();
+	new bool:res = L4D_LobbyIsReserved();
 	
-	//DebugPrintToAll("Lobby is %s reserved...", res ? "" : "NOT");
-#endif
+	DebugPrintToAll("Lobby is %s reserved...", res ? "" : "NOT");
+	
+	return Plugin_Handled;
+}
+
+public Action:Command_SetPaused(client, args)
+{
+	DebugPrintToAll("Setting paused...");
+	
+	decl String:pausedStr[64]
+	GetCmdArg(1, pausedStr, sizeof(pausedStr));
+	
+	L4D_SetPaused(bool:StringToInt(pausedStr));
+	//L4D_RestartScenario();
+	
+	return Plugin_Handled;
+}
+
+
+//unfortunately Director::RestartScenario is inlined on Windows
+public Action:Command_RestartScenario(client, args)
+{
+	DebugPrintToAll("Restarting scenario...");
+	//L4D_RestartScenario();
+	
+	return Plugin_Handled;
+}
+
+public Action:Command_GetCampaignScores(client, args)
+{
+	new scoreA, scoreB;
+	
+	L4D_GetCampaignScores(scoreA, scoreB);
+	DebugPrintToAll("Campaign scores are A=%d, B=%d", scoreA, scoreB);
 	
 	return Plugin_Handled;
 }
 
 public Action:Command_RestartScenarioFromVote(client, args)
 {
-#if USE_NATIVES
 	decl String:currentmap[128];
 	GetCurrentMap(currentmap, sizeof(currentmap));
 	
 	DebugPrintToAll("Restarting scenario from vote ...");
 	L4D_RestartScenarioFromVote(currentmap);
-#endif
 	
 	return Plugin_Handled;
 }
 
-public Action:Command_Unreserve(client, args)
+public Action:Command_ClearReservationStatus(client, args)
 {
-#if USE_NATIVES
 	DebugPrintToAll("Invoking L4D_LobbyUnreserve() ...");
+	//L4D_ClearReservationStatus();
 	L4D_LobbyUnreserve();
-#endif
 	
 	return Plugin_Handled;
 }

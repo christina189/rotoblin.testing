@@ -56,29 +56,22 @@ void InitializeValveGlobals()
 	g_pGameRules = *reinterpret_cast<void ***>(addr + offset);
 
 	/* g_pDirector */
-#if TARGET_L4D
-	const char *directorConfKey = "SelectModelByPopulation";
-#endif
-#if TARGET_L4D2
-	const char *directorConfKey = "DirectorMusicBanks_OnRoundStart";
-#endif
-	if (!g_pGameConf->GetMemSig(directorConfKey, (void **)&addr) || !addr)
+	//SetNextMission was removed :( z_nextmission no longer a valid command
+	//if (!g_pGameConf->GetMemSig("SetNextMission", (void **)&addr) || !addr)
+	if (!g_pGameConf->GetMemSig("SelectModelByPopulation", (void **)&addr) || !addr)
 	{
 		return;
 	}
 	if (!g_pGameConf->GetOffset("TheDirector", &offset) || !offset)
 	{
+#if defined THEDIRECTOR_SETNEXTMISSION_OFFSET
+		offset = THEDIRECTOR_SETNEXTMISSION_OFFSET;
+#else
 		return;
+#endif
 	}
-	g_pDirector = *reinterpret_cast<void ***>(addr + offset);
+	g_pDirector = *reinterpret_cast<void ***>(addr + offset);\
 
-#if TARGET_L4D
-	/*note that IEngine != IVEngineServer
-	also MPGameModeChangedConVar is looks like gone from L4D2
-	but we never use it for anything but IVEngineServer::IsReserved on Linux
-	so we probably won't need it ever
-	since IVEngineServer::IsReserved got removed from the Linux binary
-	*/
 	/* g_pEngine */
 	if (!g_pGameConf->GetMemSig("MPGameModeChangedConVar", (void **)&addr) || !addr)
 	{
@@ -89,7 +82,6 @@ void InitializeValveGlobals()
 		return;
 	}
 	g_pEngine = *reinterpret_cast<void ***>(addr + offset);
-#endif
 
 	/* g_pZombieManager */
 	//TODO
@@ -120,13 +112,11 @@ void InitializeValveGlobals()
 	}
 	g_pZombieManager = reinterpret_cast<void **>(addr);
 
-#if TARGET_L4D
 	/* g_pEngine */
 	if (!g_pGameConf->GetMemSig("IVEngineServer", (void **)&addr) || !addr)
 	{
 		return;
 	}
 	g_pEngine = reinterpret_cast<void **>(addr);
-#endif
 }
 #endif

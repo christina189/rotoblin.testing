@@ -33,7 +33,13 @@
 #include "vglobals.h"
 #include "util.h"
 
-// DEPRECATED ON ALL PLATFORMS/TARGETS
+//native SquareNumber(num);
+cell_t SquareNumber(IPluginContext *pContext, const cell_t *params)
+{
+	cell_t number = params[1];
+	return number * number;
+}
+
 // native L4D_GetTeamScore(logical_team, campaign_score=false)
 cell_t L4D_GetTeamScore(IPluginContext *pContext, const cell_t *params)
 {
@@ -100,9 +106,60 @@ cell_t L4D_GetTeamScore(IPluginContext *pContext, const cell_t *params)
 	cell_t retbuffer;
 	pWrapper->Execute(vstk, &retbuffer);
 
-	g_pSM->LogMessage(myself, "L4D_GetTeamScore is deprecated. You should be using SDKTools to invoke it instead.");
-
 	return retbuffer;
+}
+
+
+// native L4D_RestartScenario()
+cell_t L4D_RestartScenario(IPluginContext *pContext, const cell_t *params)
+{
+	static ICallWrapper *pWrapper = NULL;
+
+	// Director::RestartScenario()
+	if (!pWrapper)
+	{
+		REGISTER_NATIVE_ADDR("RestartScenario", 
+			pWrapper = g_pBinTools->CreateCall(addr, CallConv_ThisCall, \
+							/*retInfo*/NULL, /*paramInfo*/NULL, /*numparams*/0));
+	}
+
+#ifdef PLATFORM_WINDOWS
+	void *addr;
+	if (!g_pGameConf->GetMemSig("SetNextMission", (void **)&addr) || !addr)
+	{
+		return pContext->ThrowNativeError( "Could not read SetNextMission from GameConf");
+	}
+
+	int offset;
+	if (!g_pGameConf->GetOffset("TheDirector", &offset) || !offset)
+	{
+#if !defined THEDIRECTOR_SETNEXTMISSION_OFFSET
+		return pContext->ThrowNativeError("Could not read 'TheDirector' offset from GameConf");
+#endif
+	}
+#endif
+
+	/* Get the Director pointer */
+	if (g_pDirector == NULL)
+	{
+		return pContext->ThrowNativeError("Director unsupported or not available; file a bug report");
+	}
+
+	void *director = *g_pDirector;
+
+	if (director == NULL)
+	{
+		return pContext->ThrowNativeError("Director not available before map is loaded");
+	}
+
+	/* Build the vcall argument stack */
+	unsigned char vstk[sizeof(void *)];
+	unsigned char *vptr = vstk;
+
+	*(void **)vptr = director;
+	pWrapper->Execute(vstk, /*retbuffer*/NULL);
+
+	return 1;
 }
 
 // native L4D_RestartScenarioFromVote(const String:map[])
@@ -165,11 +222,10 @@ cell_t L4D_RestartScenarioFromVote(IPluginContext *pContext, const cell_t *param
 	return 1;
 }
 
-//DEPRECATED ON L4D2
+
 // native L4D_GetCampaignScores(&scoreA, &scoreB)
 cell_t L4D_GetCampaignScores(IPluginContext *pContext, const cell_t *params)
 {
-#if TARGET_L4D
 	const char *baseSignatureName;
 
 #ifdef PLATFORM_WINDOWS
@@ -225,26 +281,56 @@ cell_t L4D_GetCampaignScores(IPluginContext *pContext, const cell_t *params)
 	*addr = static_cast<cell_t>(scoreB);
 
 	L4D_DEBUG_LOG("L4D_GetCampaignScores(A=%d, B=%d) returned", scoreA, scoreB);
-#else
-	/*
-	 Support for this going forward is deprecated in L4D2
-	Users can use OnClearTeamScores detour and check for 'true' when campaign scores are reset
-	And keep their own campaign tally using GetTeamScore
-	*/
-	cell_t *addr;
-	pContext->LocalToPhysAddr(params[1], &addr);
-	*addr = static_cast<cell_t>(-1);
-
-	pContext->LocalToPhysAddr(params[2], &addr);
-	*addr = static_cast<cell_t>(-1);
-
-	g_pSM->LogError(myself, "L4D_OnGetCampaignScores(a,b) has been called. It is deprecated in L4D2, consider updating the plugin using this native.");
-
-#endif
 
 	return 1;
 }
 
+
+// native L4D_SetPaused(bool:pause)
+cell_t L4D_SetPaused(IPluginContext *pContext, const cell_t *params)
+{
+	if(g_pServer == NULL)
+	{
+		return pContext->ThrowNativeError("CBaseServer not available");
+	}
+
+	bool paused = params[1] ? true : false;
+	L4D_DEBUG_LOG("L4D_SetPaused(%d)", paused);
+	g_pServer->SetPaused(paused);
+
+	return 1;
+}
+
+// native L4D_ClearReservationStatus()
+cell_t L4D_ClearReservationStatus(IPluginContext *pContext, const cell_t *params)
+{
+	if(g_pServer == NULL)
+	{
+		return pContext->ThrowNativeError("CBaseServer not available");
+	}
+
+	static ICallWrapper *pWrapper = NULL;
+
+	// CBaseServer::ClearReservationStatus()
+	if (!pWrapper)
+	{
+		REGISTER_NATIVE_ADDR("ClearReservationStatus", 
+			pWrapper = g_pBinTools->CreateCall(addr, CallConv_ThisCall, \
+							/*retInfo*/NULL, /*paramInfo*/NULL, /*numparams*/0));
+	}
+
+
+	/* Build the vcall argument stack */
+	unsigned char vstk[sizeof(void *)];
+	unsigned char *vptr = vstk;
+
+	*(void **)vptr = g_pServer;
+	pWrapper->Execute(vstk, /*retbuffer*/NULL);
+
+	L4D_DEBUG_LOG("Invoked CBaseServer::ClearReservationStatus");
+
+	return 1;
+}
 
 // native L4D_LobbyUnreserve()
 cell_t L4D_LobbyUnreserve(IPluginContext *pContext, const cell_t *params)
@@ -320,20 +406,10 @@ cell_t L4D_LobbyUnreserve(IPluginContext *pContext, const cell_t *params)
 	return 1;
 }
 
-//DEPRECATED ON L4D2 and L4D1 Linux
+
 // native bool:L4D_LobbyIsReserved()
 cell_t L4D_LobbyIsReserved(IPluginContext *pContext, const cell_t *params)
 {
-#if TARGET_L4D2
-	g_pSM->LogError(myself, "L4D_LobbyIsReserved() has been called. It is deprecated in L4D2, consider updating the plugin using this native.");
-
-	return 0;
-#elif !defined PLATFORM_WINDOWS
-	g_pSM->LogError(myself, "L4D_LobbyIsReserved() has been called. It is deprecated in Linux, consider updating the plugin using this native.");
-
-	return 0;
-#endif
-
 	void *thisptr;
 	char *thisClassName;
 
@@ -354,8 +430,6 @@ cell_t L4D_LobbyIsReserved(IPluginContext *pContext, const cell_t *params)
 	thisptr = g_pServer;
 	thisClassName = "CBaseServer";
 #else
-	return pContext->ThrowNativeError("LobbyIsReserved not available on Linux");
-
 	if(g_pEngine == NULL)
 	{
 		return pContext->ThrowNativeError("IVEngineServer not available");
@@ -414,88 +488,19 @@ cell_t L4D_LobbyIsReserved(IPluginContext *pContext, const cell_t *params)
 
 	L4D_DEBUG_LOG("Invoked %s::IsReserved, got back = %d", thisClassName, retbuffer);
 
-	return retbuffer;
-}
-
-// native L4D_ScavengeBeginRoundSetupTime()
-cell_t L4D_ScavengeBeginRoundSetupTime(IPluginContext *pContext, const cell_t *params)
-{
-#if TARGET_L4D
-	return pContext->ThrowNativeError("L4D_ScavengeBeginRoundSetupTime() does not exist in L4D");
-#endif
-
-	static ICallWrapper *pWrapper = NULL;
-
-	// Director::RestartScenario()
-	if (!pWrapper)
-	{
-		REGISTER_NATIVE_ADDR("CDirectorScavengeMode_OnBeginRoundSetupTime", 
-			pWrapper = g_pBinTools->CreateCall(addr, CallConv_ThisCall, /*returnInfo*/NULL, /*Pass*/NULL, /*numparams*/0));
-	}
-
-	void *addr;
-	if (!g_pGameConf->GetMemSig("CDirectorScavengeMode_OnBeginRoundSetupTime", (void **)&addr) || !addr)
-	{
-		return pContext->ThrowNativeError( "Could not read CDirectorScavengeMode_OnBeginRoundSetupTime from GameConf");
-	}
-
-	/* Get the Director pointer */
-	if (g_pDirector == NULL)
-	{
-		return pContext->ThrowNativeError("Director unsupported or not available; file a bug report");
-	}
-
-	void *director = *g_pDirector;
-
-	if (director == NULL)
-	{
-		return pContext->ThrowNativeError("Director not available before map is loaded");
-	}
-
-	/* Get the DirectorScavengeMode pointer */
-	if (!g_pGameConf->GetMemSig("CDirector_AreWanderersAllowed", (void **)&addr) || !addr)
-	{
-		return pContext->ThrowNativeError( "Could not read CDirector_AreWanderersAllowed from GameConf");
-	}
-
-	//read offset into CDirector_AreWanderersAllowed
-	int offset;
-	if (!g_pGameConf->GetOffset("CDirectorScavengeMode", &offset) || !offset)
-	{
-#if !defined THEDIRECTOR_SETNEXTMISSION_OFFSET
-		return pContext->ThrowNativeError("Could not read 'CDirectorScavengeMode' offset from GameConf");
-#endif
-	}
-
-	/* read the offset into director */
-	offset = *reinterpret_cast<int*>(reinterpret_cast<uint8_t*>(addr) + offset);
-	L4D_DEBUG_LOG("CDirectorScavengeMode director offset calculated to %d", offset);
-
-	void *directorScavengeMode = *reinterpret_cast<void**>(reinterpret_cast<uint8_t*>(director) + offset);
-	L4D_DEBUG_LOG("CDirectorScavengeMode pointer is %x", directorScavengeMode);
-
-	if(directorScavengeMode == NULL)
-	{
-		return pContext->ThrowNativeError("CDirectorScavengeMode unsupported or not available; file a bug report");
-	}
-
-	/* Build the vcall argument stack */
-	unsigned char vstk[sizeof(void *)];
-	unsigned char *vptr = vstk;
-
-	*(void **)vptr = directorScavengeMode;
-	pWrapper->Execute(vstk, /*retbuffer*/NULL);
-
-	return 1;
+	return (bool)retbuffer;
 }
 
 sp_nativeinfo_t g_L4DoNatives[] = 
 {
+	{"SquareNumber",				SquareNumber},
 	{"L4D_GetTeamScore",			L4D_GetTeamScore},
-	{"L4D_GetCampaignScores",		L4D_GetCampaignScores},
+	{"L4D_RestartScenario",			L4D_RestartScenario},
 	{"L4D_RestartScenarioFromVote",	L4D_RestartScenarioFromVote},
+	{"L4D_GetCampaignScores",		L4D_GetCampaignScores},
+	{"L4D_SetPaused",				L4D_SetPaused},
+	{"L4D_ClearReservationStatus",	L4D_ClearReservationStatus},
 	{"L4D_LobbyUnreserve",			L4D_LobbyUnreserve},
 	{"L4D_LobbyIsReserved",			L4D_LobbyIsReserved},
-	{"L4D_ScavengeBeginRoundSetupTime", L4D_ScavengeBeginRoundSetupTime},
 	{NULL,							NULL}
 };

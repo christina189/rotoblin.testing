@@ -78,7 +78,7 @@ int PlayerSlots::MaxPlayers = -1;
 
 #define PLAYER_SLOTS_MAX MaxSlots
 
-void PlayerSlots::Patch()
+void PlayerSlots::Patch() 
 {
 	bool firstTime = !(humanLimitSig && lobbyConnectSig);
 	L4D_DEBUG_LOG("PlayerSlots - Patching ...");
@@ -89,10 +89,10 @@ void PlayerSlots::Patch()
 	if(firstTime)
 	{
 		if (!g_pGameConf->GetMemSig("HumanPlayerLimitReached", &humanLimitSig) || !humanLimitSig) 
-		{
+		{ 
 			g_pSM->LogError(myself, "PlayerSlots -- Could not find 'HumanPlayerLimitReached' signature");
 			return;
-		}
+		} 
 	}
 
 	//code pages can't be written to by default, so ApplyPatch changes that ;)
@@ -102,10 +102,9 @@ void PlayerSlots::Patch()
 
 		jl -> jmp (Windows)
 		jle -> nop (Linux)
-
+	
 	we never check if the human player limit has been reached
 	*/
-
 	patch_t humanLimitPatch;
 
 #if defined PLATFORM_WINDOWS
@@ -114,12 +113,12 @@ void PlayerSlots::Patch()
 #else //PLATFORM_LINUX
 	humanLimitPatch.bytes = OP_JLE_REL8_SIZE;
 	fill_nop(humanLimitPatch.patch, humanLimitPatch.bytes);
+
 #endif
 	ApplyPatch(humanLimitSig, /*offset*/0, &humanLimitPatch, firstTime ? &humanLimitRestore : NULL);
 
 	L4D_DEBUG_LOG("PlayerSlots -- 'HumanPlayerLimitReached' jl(e) patched to jmp");
 	
-
 	/*
 	Engine patch
 	*/
@@ -127,8 +126,7 @@ void PlayerSlots::Patch()
 	{ 
 		g_pSM->LogError(myself, "PlayerSlots -- Could not find 'ConnectClientLobbyCheck' signature");
 		return;
-	}
-#if defined PLATFORM_WINDOWS
+	} 
 
 	/*
 	jz around the string "#Valve_Reject_Server_Full"
@@ -144,28 +142,20 @@ void PlayerSlots::Patch()
 
 	unsigned char oldValue2 = lobbyConnectRestore.patch[0];
 	L4D_DEBUG_LOG("PlayerSlots -- 'ConnectClientLobbyCheck' jz(%x) patched to 2 nops", oldValue2);
-#endif
+
+	//PlayerSlots::PatchGetMaxHumanPlayers();
 }
 
 static void *getMaxHumanPlayersSig = NULL;
 static patch_t getMaxHumanPlayersRestore;
 
-/*
+/* 
 	Patch CTerrorGameRules::GetMaxHumanPlayers(void) to always return our own value
 
-	This will cause server browsers to display our own 'max players' value (Linux only)
-
-	On Windows overriding it does nothing at first..
-	  but actually it breaks scavenge mode which is stuck in a 'scavenge versus' type mode
-	  so it should NEVER BE PATCHED FOR WINDOWS EVER
-
-	On Linux just overriding ServerPlayerCounts isn't enough (it only fixes 'status' command)
-	  but overwriting GetMaxHumanPlayers works great
+	This will cause server browsers to display our own 'max players' value
 */
 void PlayerSlots::PatchGetMaxHumanPlayers()
 {
-#if !defined PLATFORM_WINDOWS
-
 	bool firstTime = (getMaxHumanPlayersSig == NULL);
 
 	if(firstTime)
@@ -198,7 +188,6 @@ void PlayerSlots::PatchGetMaxHumanPlayers()
 	// mov eax, PLAYER_SLOTS_MAX
 	getMaxHumanPlayersPatch.patch[0] = OP_MOV_EAX_IMM32;
 	*(uint32_t*)(getMaxHumanPlayersPatch.patch+sizeof(uint8_t)) = (uint32_t)PLAYER_SLOTS_MAX;
-
 	// retn
 	getMaxHumanPlayersPatch.patch[OP_MOV_EAX_IMM32_SIZE] = OP_RETN;
 
@@ -210,72 +199,24 @@ void PlayerSlots::PatchGetMaxHumanPlayers()
 	{
 		ApplyPatch(getMaxHumanPlayersSig, /*offset*/0, &getMaxHumanPlayersPatch, /*restore*/NULL);
 	}
-
+	
 	L4D_DEBUG_LOG("PlayerSlots -- 'GetMaxHumanPlayers' patched to MOV eax, %d; retn", PLAYER_SLOTS_MAX);
-
-#endif
 }
-
-/*
-static void *getTotalNumPlayersSupportedSig = NULL;
-static patch_t getTotalNumPlayersSupportedRestore;
-
-void PlayerSlots::PatchGetTotalNumPlayersSupported()
-{
-        bool firstTime = (getTotalNumPlayersSupportedSig == NULL);
-
-        if(firstTime)
-        {
-                if (!g_pGameConf->GetMemSig("GetTotalNumPlayersSupported", &getTotalNumPlayersSupportedSig) || !getTotalNumPlayersSupportedSig)
-                {
-                        g_pSM->LogError(myself, "PlayerSlots -- Could not find 'GetTotalNumPlayersSupported' signature");
-                        return;
-                }
-        }
-
-        patch_t getTotalNumPlayersSupportedPatch;
-        getTotalNumPlayersSupportedPatch.bytes = OP_MOV_EAX_IMM32_SIZE + OP_RETN_SIZE;
-
-        // mov eax, PLAYER_SLOTS_MAX
-        getTotalNumPlayersSupportedPatch.patch[0] = OP_MOV_EAX_IMM32;
-        *(uint32_t*)(getTotalNumPlayersSupportedPatch.patch+sizeof(uint8_t)) = (uint32_t)PLAYER_SLOTS_MAX;
-
-        // retn
-        getTotalNumPlayersSupportedPatch.patch[OP_MOV_EAX_IMM32_SIZE] = OP_RETN;
-
-        if(firstTime)
-        {
-                ApplyPatch(getTotalNumPlayersSupportedSig, 0, &getTotalNumPlayersSupportedPatch, &getTotalNumPlayersSupportedRestore);
-        }
-        else
-        {
-                ApplyPatch(getTotalNumPlayersSupportedSig, 0, &getTotalNumPlayersSupportedPatch, NULL);
-        }
-
-        L4D_DEBUG_LOG("PlayerSlots -- 'GetTotalNumberOfPlayersSupported' patched to MOV eax, %d; retn", PLAYER_SLOTS_MAX);
-}
-
-* EOP */
 
 void PlayerSlots::PatchSlotCheckOnly()
 {
-	if(!lobbyConnectSig) return; //avoid a null dereference if we failed to lookup the sig
-
 	bool firstTime = (serverFullOffset == -1);
 
 	if(firstTime)
 	{
 		//////////////////////////
 		//valve reject server full
-
 		if (!g_pGameConf->GetOffset("ValveRejectServerFullFirst", &serverFullOffset))
 		{
 			g_pSM->LogError(myself, "PlayerSlots -- Could not find 'ValveRejectServerFullFirst' offset");
 			return;
 		}
-
 		//the offset should point to the cmp eax, [esi+180h]... first byte incorrect => wrong offset
-
 		if(*((uint8_t*)lobbyConnectSig + serverFullOffset) != OP_CMP_R32_RM32)
 		{
 			g_pSM->LogError(myself, "PlayerSlots -- Offset for 'ValveRejectServerFullFirst' is incorrect");
@@ -299,17 +240,14 @@ void PlayerSlots::PatchSlotCheckOnly()
 	serverFullPatch.patch[0] = OP_CMP_RM32_IMM32;
 	serverFullPatch.patch[MODRM_BYTE] = MODRM_MOD_DIRECT | OP_CMP_RM32_IMM32_MODRM_DIGIT | MODRM_RM_EDX; //0xFA
 	*(uint32_t*)(serverFullPatch.patch+MODRM_BYTE+sizeof(uint8_t)) = (uint32_t)PLAYER_SLOTS_MAX;
-
 #else //PLATFORM_WINDOWS
 	serverFullPatch.bytes = OP_CMP_R32_RM32_SIZE;
 
 	//replace the first part of cmp eax, [esi+180h] with cmp eax, IMM32(player_slots_max)
-
 	serverFullPatch.patch[0] = OP_CMP_EAX_IMM32;
 	*(uint32_t*)(serverFullPatch.patch+sizeof(uint8_t)) = (uint32_t)PLAYER_SLOTS_MAX;
 
 	//fill in the rest of the patch size with nops
-
 	fill_nop(serverFullPatch.patch + OP_CMP_EAX_IMM32_SIZE, OP_CMP_R32_RM32_SIZE - OP_CMP_EAX_IMM32_SIZE);
 #endif
 
@@ -333,23 +271,9 @@ void PlayerSlots::UnpatchGetMaxHumanPlayers()
 	}
 }
 
-/* Unpatch for Group Lobby - Future implementation - XBetaAlpha
-
-void PlayerSlots::UnpatchGetTotalNumPlayersSupported()
-{
-        if(getTotalNumPlayersSupportedSig)
-        {
-                ApplyPatch(getTotalNumPlayersSupportedSig, 0, &getTotalNumPlayersSupportedRestore, NULL);
-                L4D_DEBUG_LOG("PlayerSlots -- 'GetTotalNumPlayersSupported' restored");
-        }
-}
-
-* EOP */
-
 void PlayerSlots::UnpatchSlotCheckOnly()
 {
 	//cmp around the string "#Valve_Reject_Server_Full"
-
 	if(lobbyConnectSig && serverFullOffset != -1)
 	{
 		ApplyPatch(lobbyConnectSig, serverFullOffset, &serverFullRestore, /*restore*/NULL);
@@ -362,7 +286,6 @@ void PlayerSlots::Unpatch()
 	L4D_DEBUG_LOG("PlayersSlots - Unpatching ...");
 
 	//jl around the string "Human player limit reached (%d/%d)"
-
 	if(humanLimitSig)
 	{
 		ApplyPatch(humanLimitSig, /*offset*/0, &humanLimitRestore, /*restore*/NULL);
@@ -370,7 +293,6 @@ void PlayerSlots::Unpatch()
 	}
 
 	//jz around the string "#Valve_Reject_Server_Full"
-
 	if(lobbyConnectSig)
 	{
 		ApplyPatch(lobbyConnectSig, /*offset*/0, &lobbyConnectRestore, /*restore*/NULL);
@@ -379,7 +301,6 @@ void PlayerSlots::Unpatch()
 
 	PlayerSlots::UnpatchSlotCheckOnly();
 	PlayerSlots::UnpatchGetMaxHumanPlayers();
-	//PlayerSlots::UnpatchGetTotalNumPlayersSupported();
 }
 
 void OnMaxPlayersChanged( IConVar *var, const char *pOldValue, float flOldValue )
@@ -403,12 +324,10 @@ void PlayerSlots::OnMaxSlotsChanged(int max_slots)
 	}
 
 	/* no change */
-
 	if(MaxSlots == max_slots)
 		return;
 
 	// disable
-
 	if(max_slots < 0)
 	{
 		L4D_DEBUG_LOG("Disabling slots patch");
@@ -430,7 +349,6 @@ void PlayerSlots::OnMaxSlotsChanged(int max_slots)
 #endif
 
 	// cant allow this obviously
-
 	if(max_slots > MaxClients)
 	{
 		UpdateMaxSlots(MaxSlots);
@@ -438,12 +356,10 @@ void PlayerSlots::OnMaxSlotsChanged(int max_slots)
 	}
 
 	//enable
-
 	UpdateMaxSlots(max_slots);
 
 	L4D_DEBUG_LOG("Enabling slots patch");
 	PlayerSlots::Patch();
 	PlayerSlots::PatchSlotCheckOnly();
 	PlayerSlots::PatchGetMaxHumanPlayers();
-	//PlayerSlots::PatchGetTotalNumPlayersSupported();
 }

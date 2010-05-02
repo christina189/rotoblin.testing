@@ -57,13 +57,6 @@ public:
 	static void PatchGetMaxHumanPlayers();
 	static void UnpatchGetMaxHumanPlayers();
 
-/* - XBetaAlpha - Future implementation
-
-        static void PatchGetTotalNumPlayersSupported();
-        static void UnpatchGetTotalNumPlayersSupported();
-
-* EOP */
-
 	static void OnMaxSlotsChanged(int max_slots);
 
 	static int MaxClients; /* as defined by GetMaxClients() */

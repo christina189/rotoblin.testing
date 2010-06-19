@@ -26,7 +26,7 @@
 #define READY_RESTART_ROUND_DELAY 5.0
 #define READY_RESTART_MAP_DELAY 5.0
 
-#define READY_VERSION_REQUIRED_SOURCEMOD "1.3.1"
+#define READY_VERSION_REQUIRED_SOURCEMOD "1.3.2"
 #define READY_VERSION_REQUIRED_SOURCEMOD_NONDEV 1 //1 dont allow -dev version, 0 ignore -dev version
 #define READY_VERSION_REQUIRED_LEFT4DOWNTOWN "0.3.1"
 
@@ -1145,7 +1145,7 @@ DrawReadyPanelList()
 	DrawPanelText(panel, versionInfo);
 	
 #if LEAGUE_ADD_NOTICE
-	DrawPanelText(panel,     "Rotoblin CFG v0.5.0-ESL");
+	DrawPanelText(panel,     "Rotoblin CFG v0.6.0-ESL");
 #endif
 	
 	for (i = 1; i < L4D_MAXCLIENTS_PLUS1; i++) 

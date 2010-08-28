@@ -19,14 +19,14 @@
 #define READY_DEBUG 0
 #define READY_DEBUG_LOG 0
 
-#define READY_VERSION "0.16.3.esl"
+#define READY_VERSION "0.7.1"
 #define READY_LIVE_COUNTDOWN 5
 #define READY_UNREADY_HINT_PERIOD 10.0
 #define READY_LIST_PANEL_LIFETIME 10
 #define READY_RESTART_ROUND_DELAY 5.0
 #define READY_RESTART_MAP_DELAY 5.0
 
-#define READY_VERSION_REQUIRED_SOURCEMOD "1.3.2"
+#define READY_VERSION_REQUIRED_SOURCEMOD "1.3.4"
 #define READY_VERSION_REQUIRED_SOURCEMOD_NONDEV 1 //1 dont allow -dev version, 0 ignore -dev version
 #define READY_VERSION_REQUIRED_LEFT4DOWNTOWN "0.3.1"
 
@@ -100,10 +100,10 @@ new bool:isMapRestartPending;
 public Plugin:myinfo =
 {
 	name = "L4D Ready Up",
-	author = "Downtown1",
+	author = "Downtown1 & the rotoblin dev team",
 	description = "Force Players to Ready Up Before Beginning Match",
 	version = READY_VERSION,
-	url = "http://forums.alliedmods.net/showthread.php?t=84086"
+	url = "http://code.google.com/p/rotoblin/"
 };
 
 public OnPluginStart()

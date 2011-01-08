@@ -221,9 +221,8 @@ public _HC_OnEntityCreated(entity, const String:classname[])
 		new entRef = EntIndexToEntRef(entity);
 		CreateTimer(REPLACE_DELAY, _HC_RemoveItem_Delayed_Timer, entRef);
 	} 	
-	else if (StrEqual(classname, FIRST_AID_KIT_CLASSNAME)) 
-	{
-		// otherwise just do standard replacement strategy
+	else if(StrEqual(classname, FIRST_AID_KIT_CLASSNAME) && ShouldReplaceKitWithPills(entity)) 
+	{		
 		new entRef = EntIndexToEntRef(entity);
 		CreateTimer(REPLACE_DELAY, _HC_ReplaceKit_Delayed_Timer, entRef); // Replace medkit
 		DebugPrintToAllEx("Late spawned medkit, timer created. Entity %i", entity);
@@ -241,12 +240,12 @@ public Action:_HC_RemoveItem_Delayed_Timer(Handle:timer, any:entRef)
  * Called when the replace kit timer interval has elapsed.
  * 
  * @param timer			Handle to the timer object.
- * @param data			Data passed to CreateTimer() when timer was created.
+ * @param medkitEntRef	Entity reference to the medkit to be removed
  * @noreturn
  */
-public Action:_HC_ReplaceKit_Delayed_Timer(Handle:timer, any:entRef)
+public Action:_HC_ReplaceKit_Delayed_Timer(Handle:timer, any:medkitEntRef)
 {
-	new entity = EntRefToEntIndex(entRef);
+	new entity = EntRefToEntIndex(medkitEntRef);
 	
 	if (entity < 0 || entity > MAX_ENTITIES || !IsValidEntity(entity)) 
 	{
@@ -254,6 +253,7 @@ public Action:_HC_ReplaceKit_Delayed_Timer(Handle:timer, any:entRef)
 		return;
 	}
 
+	// check just in case, by some miracle (or our own incompetence), the kit has swapped to some other entity type
 	decl String:classname[64];
 	GetEdictClassname(entity, classname, 64);
 	if (!StrEqual(classname, FIRST_AID_KIT_CLASSNAME)) 
@@ -262,7 +262,7 @@ public Action:_HC_ReplaceKit_Delayed_Timer(Handle:timer, any:entRef)
 		return;
 	}
 
-	ReplaceKit(entity);
+	ReplaceKitWithPills(entity);
 }
 
 // **********************************************
@@ -304,12 +304,16 @@ static UpdateStartingHealthItems()
 	DebugPrintToAllEx("Updating starting health items.");
 	new entity = -1;
 	
+	// First, replace all starting medkits for pills.  This applies for all replacement strategies.
 	while ((entity = FindEntityByClassnameEx(entity, FIRST_AID_KIT_CLASSNAME)) != -1)
 	{
-		ReplaceKit(entity);
+		if(ShouldReplaceKitWithPills(entity))
+		{
+			ReplaceKitWithPills(entity);
+		}
 	}
 	
-	// Functions as a post-step to the above.
+	// Then, if we're using the hardcore setting, remove all pills from the map excluding the finale sets
 	if(g_iHealthStyle == SAFEROOM_AND_FINALE_PILLS_ONLY)
 	{		
 		if(g_bIsFinale)
@@ -327,7 +331,8 @@ static UpdateStartingHealthItems()
 		}
 		DebugPrintToAllEx("Finished removing pills.");
 		
-		// Now we either have 0 (standard) or 4 (finale) sets of pills remaining; add back the original pills
+		// Finally: Now we either have 0 (standard) or 4 (finale) sets of pills remaining.
+		// Give the survivors the pills that we've removed from the saferoom.
 		GivePillsToSurvivors();
 	}
 }
@@ -452,26 +457,36 @@ static DetermineIfMapIsFinale()
 }
 
 /**
- * Replaces medkit with pills unless the health style precludes it
- * @param entity the medkit entity to be considered for replacement
- * @noreturn				
+ * Predicate used to determine whether we should replace kits with pills
+ * @param entity 	medkit entity to be considered for replacement
+ * @return			whether the kit should be replaced with pills
  */
-static ReplaceKit(entity)
+static bool:ShouldReplaceKitWithPills(entity)
 {
 	if (g_bIsFinale && 
 		g_iHealthStyle == REPLACE_ALL_BUT_FINALE_KITS && 
 		EntityIsInsideFinaleArea(entity))
 	{
 		// Finale medkit and we're not replacing them; can't touch this!
-		return;					
+		return false;					
 	}			
 	
+	return true;
+}
+
+/**
+ * Replaces medkit with pills unless the health style precludes it
+ * @param entity the medkit entity to be considered for replacement
+ * @noreturn				
+ */
+static ReplaceKitWithPills(entity)
+{	
 	new result = ReplaceEntity(entity, PAIN_PILLS_CLASSNAME, MODEL_PAIN_PILLS, 1);
 	if (!result)
 	{
 		ThrowError("Failed to replace medkit with pills! Entity %i", entity);
 	}
-	DebugPrintToAllEx("ReplaceKit - Medkit (entity %i) replaced with pills (entity %i)", entity, result);	
+	DebugPrintToAllEx("Medkit (entity %i) replaced with pills (entity %i)", entity, result);	
 }
 
 /**

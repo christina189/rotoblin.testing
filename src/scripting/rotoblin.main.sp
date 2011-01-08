@@ -98,7 +98,7 @@
 #include "rotoblin.infectedfrustration.sp"
 #include "rotoblin.itemcontrol.sp"
 #include "rotoblin.meleefatigue.sp"
-#include "rotoblin.nopropfadíng.sp"
+#include "rotoblin.nopropfading.sp"
 #include "rotoblin.pause.sp"
 #include "rotoblin.ratehack.sp"
 #include "rotoblin.reportstatus.sp"

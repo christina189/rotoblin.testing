@@ -1,4 +1,4 @@
-echo off
+@echo off
 setlocal
 
 set "PLUGIN_DIR=src\scripting\rotoblin"
@@ -19,4 +19,4 @@ echo --------------------------------------------
 
 endlocal
 pause
-echo on
+@echo on

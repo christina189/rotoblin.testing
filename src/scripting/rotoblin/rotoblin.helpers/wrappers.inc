@@ -350,3 +350,27 @@ stock SetPlayerGhostState(client, bool:isGhost)
 {
 	SetEntProp(client, Prop_Send, "m_isGhost", isGhost, 1);
 }
+
+/**
+ * Removes an edict.  Checks the index for validity and then tries to remove via kill, then if that doesn't work, RemoveEdict.
+ *
+ * @param entity		The edict to try and remove
+ * @return				Whether the removal was successful or not.
+ */
+stock bool:SafelyRemoveEdict(entity)
+{
+	if (entity < 0 || entity > MAX_ENTITIES || !IsValidEdict(entity))
+	{		
+		return false;
+	}
+	
+	// Try and use the entity's kill input first.  If that doesn't work, fall back on RemoveEdict.
+	// AFAIK, we should always try to use Kill, as I've noticed problems when calling RemoveEdict (ents sticking around after deletion).
+	// This could be down to my own idiocy, but ... still.
+	if(!AcceptEntityInput(entity, "Kill"))
+	{		
+		RemoveEdict(entity);			
+	}
+	
+	return true;
+}

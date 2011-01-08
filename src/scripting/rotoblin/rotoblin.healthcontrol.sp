@@ -232,15 +232,8 @@ public _HC_OnEntityCreated(entity, const String:classname[])
 
 public Action:_HC_RemoveItem_Delayed_Timer(Handle:timer, any:entRef)
 {
-	new entity = EntRefToEntIndex(entRef);
-	
-	if (entity < 0 || entity > MAX_ENTITIES || !IsValidEntity(entity))
-	{
-		DebugPrintToAllEx("ERROR: When removing medkit or pills, entity (index: %i) invalidated!", entity);
-		return;
-	}
-	
-	RemoveEdict(entity);
+	new entity = EntRefToEntIndex(entRef);		
+	SafelyRemoveEdict(entity);
 	DebugPrintToAllEx("Removed item");
 }
 
@@ -347,22 +340,22 @@ static UpdateStartingHealthItems()
 static RemoveAllPills()
 {
 	DebugPrintToAllEx("Removing all pills");
-	new deleted = 0;
+	new removedCount = 0;
 	new entity = -1;
 	while ((entity = FindEntityByClassnameEx(entity, PAIN_PILLS_CLASSNAME)) != -1)
 	{		
-		if(!IsValidEntity(entity))
-		{
-			DebugPrintToAllEx("Invalid entity.  Skipping.  Entity: %i", entity);
-			continue;
+		if(SafelyRemoveEdict(entity))
+		{			
+			removedCount++;
+			DebugPrintToAllEx("Removed pills (ent: %i)", entity);
 		}
-			
-		DebugPrintToAllEx("Deleting pills; ent is: %i", entity);
-		RemoveEdict(entity);				
-		deleted++;
+		else
+		{
+			DebugPrintToAllEx("Failed to remove pills (ent: %i)", entity);
+		}
 	}
 	
-	DebugPrintToAllEx("Deleted %i sets of pills", deleted);
+	DebugPrintToAllEx("Removed %i sets of pills", removedCount);
 }
 
 /**
@@ -375,7 +368,7 @@ static RemoveAllPillsExcluding(pills[4])
 {	
 	DebugPrintToAllEx("Removing all pills excluding finale pills.");
 		
-	new deleted = 0;
+	new removedCount = 0;
 	new entity = -1;
 	while ((entity = FindEntityByClassnameEx(entity, PAIN_PILLS_CLASSNAME)) != -1)
 	{		
@@ -385,27 +378,33 @@ static RemoveAllPillsExcluding(pills[4])
 			continue;
 		}
 			
-		new bool:delete = true;
+		new bool:shouldRemove = true;
 		DebugPrintToAllEx("Testing ent %i (pills) to see whether we should remove it.", entity);
 				
 		for(new j = 0; j < 4; j++)
 		{			
 			if(entity == pills[j])
 			{
-				DebugPrintToAllEx("Entity %i (pills) won't be deleted.", entity);
-				delete = false;							
+				DebugPrintToAllEx("Pills (ent: %i) won't be removed.", entity);
+				shouldRemove = false;							
 			}				
 		}		
 
-		if(delete == true)
-		{
-			DebugPrintToAllEx("Deleting (non-finale) pills; ent is: %i", entity);
-			RemoveEdict(entity);
-			deleted++;
+		if(shouldRemove)
+		{			
+			if(SafelyRemoveEdict(entity))
+			{
+				removedCount++;
+				DebugPrintToAllEx("Removed (non-finale) pills (ent: %i)", entity);
+			}
+			else
+			{
+				DebugPrintToAllEx("Failed to remove (non-finale) pills (ent: %i)", entity);
+			}
 		}
 	}
 
-	DebugPrintToAllEx("Deleted %i sets of pills", deleted);
+	DebugPrintToAllEx("Removed %i sets of pills", removedCount);
 }
 
 /**

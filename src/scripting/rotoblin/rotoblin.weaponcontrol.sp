@@ -281,27 +281,34 @@ public Action:_WC_ReplaceTier2_Delayed_Timer(Handle:timer, Handle:pack)
 	new count = ReadPackCell(pack);
 	CloseHandle(pack);
 
-	decl String:buffer[256];
-	GetEdictClassname(entity, buffer, sizeof(buffer));
+	/* Check for entity invalidation */
+	new bool:entInvalid = false
 	if (entity < 0 || entity > MAX_ENTITIES || !IsValidEntity(entity))
 	{
-		DebugPrintToAllEx("ERROR: Replaced delayed tier 2 weapon; Entity index invalided! Entity %i, classname \"%s\", new classname \"%s\", count %i", entity, buffer, newClassname, count);
-	}
-	else if (!StrEqual(classname, buffer))
-	{
-		DebugPrintToAllEx("ERROR: Replaced delayed tier 2 weapon; Entity classname invalided! Entity %i, classname \"%s\", new classname \"%s\", count %i", entity, buffer, newClassname, count);
+		DebugPrintToAllEx("ERROR: Replaced delayed tier 2 weapon; Entity index invalided! Entity %i, classname \"%s\", new classname \"%s\", count %i", entity, classname, newClassname, count);
+		entInvalid = true;
 	}
 	else
 	{
-		StoreTier2(entity, model); // Store the tier 2 in the array
-		ReplaceEntity(entity, newClassname, newModel, count); // Replace with tier 1
-		DebugPrintToAllEx("Replaced delayed tier 2 weapon; entity %i, classname \"%s\", new classname \"%s\", count %i", entity, buffer, newClassname, count);
-		return; // Entity replaced correctly, return
+		decl String:buffer[256];
+		GetEdictClassname(entity, buffer, sizeof(buffer));
+		if (StrEqual(classname, buffer))
+		{
+			DebugPrintToAllEx("ERROR: Replaced delayed tier 2 weapon; Entity classname invalided! Entity %i, classname \"%s\", new classname \"%s\", count %i", entity, buffer, newClassname, count);
+			entInvalid = true;
+		}
 	}
 
-	// PANIC WE LOST A TIER 2!
-	DebugPrintToAllEx("ERROR: Replaced delayed tier 2 weapon; Lost a tier 2 weapon! Time to panic, search for all tier 2 weapons of that classname!");
-	ReplaceAllTier2(classname, model, newClassname, newModel, count);
+	if (entInvalid) // Oh no, we lost a tier 2
+	{
+		DebugPrintToAllEx("ERROR: Replaced delayed tier 2 weapon; Lost a tier 2 weapon! Time to panic, search for all tier 2 weapons of that classname!");
+		ReplaceAllTier2(classname, model, newClassname, newModel, count); // Time to panic
+		return;
+	}
+
+	StoreTier2(entity, model); // Store the tier 2 in the array
+	ReplaceEntity(entity, newClassname, newModel, count); // Replace with tier 1
+	DebugPrintToAllEx("Replaced delayed tier 2 weapon; entity %i, classname \"%s\", new classname \"%s\", count %i", entity, classname, newClassname, count);
 }
 
 // **********************************************

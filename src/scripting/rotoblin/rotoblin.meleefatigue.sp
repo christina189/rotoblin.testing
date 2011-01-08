@@ -226,27 +226,21 @@ public Action:ResetsoundHookDelay(Handle:timer, any:client)
 static bool:ShouldPerformCustomFatigueLogic(const String:StrSample[PLATFORM_MAX_PATH], entity)
 {
 	// 1 is the standard setting, so just let the game handle it as normal.  
-	if (g_nonFatiguedMeleePenalty <= 1)
-	{
-		return false;
-	}
+	if (g_nonFatiguedMeleePenalty <= 1) 
+		return false;	
 	
-	// to work only on melee sounds, its 'swish' or 'weaponswing'
-	if (StrContains(StrSample, MELEE_SOUND_NAME_SEARCH, false) == -1) 
-	{
-		return false;
-	}
-	
+	// bugfix for some people on L4D2
 	if (entity > MAXPLAYERS) 
-	{	
-		return false; // bugfix for some people on L4D2
-	}
-		
-	if (soundHookDelay[entity]) 
-	{	
-		return false; //note 'entity' means 'client' here
-	}
+		return false; 
 	
+	// note 'entity' means 'client' here
+	if (soundHookDelay[entity]) 
+		return false; 
+	
+	// Do the string contains last, as it's the most expensive check.	
+	if (StrContains(StrSample, MELEE_SOUND_NAME_SEARCH, false) == -1) 
+		return false;
+		
 	return true;
 }
 

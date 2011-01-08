@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-set "PLUGIN_DIR=src\scripting\rotoblin"
+set "PLUGIN_DIR=src\scripting"
 set "PLUGIN_NAME=rotoblin.main"
 set "RELEASE_NAME=rotoblin"
 set "SPCOMP=bin\sourcepawn\spcomp.exe"

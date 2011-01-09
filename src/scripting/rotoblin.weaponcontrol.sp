@@ -282,7 +282,7 @@ public Action:_WC_ReplaceTier2_Delayed_Timer(Handle:timer, Handle:pack)
 	CloseHandle(pack);
 
 	/* Check for entity invalidation */
-	new bool:entInvalid = false
+	new bool:entInvalid = false;
 	if (entity < 0 || entity > MAX_ENTITIES || !IsValidEntity(entity))
 	{
 		DebugPrintToAllEx("ERROR: Replaced delayed tier 2 weapon; Entity index invalided! Entity %i, classname \"%s\", new classname \"%s\", count %i", entity, classname, newClassname, count);

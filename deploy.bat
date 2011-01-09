@@ -1,6 +1,5 @@
 @echo off
 setlocal
-
 REM Simple batch script to upload the .smx file to a server via FTP. Note: Does _not_ 
 REM upload configs or anything else.  This script is just for convenience when developing.
 
@@ -21,7 +20,7 @@ REM the ftp credentials and the remote directory path.
 
 pushd %~dp0
 
-set "PLUGIN_FILENAME=rotoblin.smx"
+set "PLUGIN_FILENAME=build\rotoblin.smx"
 
 echo --------------------------------------------
 echo Deploying plugin to server via FTP.
@@ -38,5 +37,3 @@ echo --------------------------------------------
 
 popd
 endlocal
-pause
-@echo on

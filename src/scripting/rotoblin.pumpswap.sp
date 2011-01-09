@@ -99,7 +99,7 @@ public _PS_OnPluginDisabled()
 
 	for (new client = 1; client <= MaxClients; client++)
 	{
-		if (!IsClientInGame(client) || IsFakeClient(client)) continue;
+		if (!IsClientInGame(client)) continue;
 		SDKUnhook(client, SDKHook_WeaponSwitch, _PS_OnWeaponSwitch);
 	}
 }
@@ -112,7 +112,6 @@ public _PS_OnPluginDisabled()
  */
 public _PS_OnClientPutInServer(client)
 {
-	if (IsFakeClient(client)) return;
 	g_bInCooldown[client] = false;
 	g_bSwapedWeapon[client] = false;
 	SDKHook(client, SDKHook_WeaponSwitch, _PS_OnWeaponSwitch);
@@ -126,7 +125,6 @@ public _PS_OnClientPutInServer(client)
  */
 public _PS_OnClientDisconnect(client)
 {
-	if (IsFakeClient(client) || !IsValidEntity(client)) return;
 	SDKUnhook(client, SDKHook_WeaponSwitch, _PS_OnWeaponSwitch);
 }
 

@@ -1,0 +1,1456 @@
+"Games"
+{
+	/* Original Engine */
+	"#default"
+	{
+		"#supported"
+		{
+			"game"		"cstrike"
+			"game"		"hl2mp"
+		}
+		
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"90"
+				"linux"		"91"
+			}
+			"FireBullets"
+			{
+				"windows"	"101"
+				"linux"		"102"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"60"
+				"linux"		"61"
+			}
+			"PreThink"
+			{
+				"windows"	"273"
+				"linux"		"274"
+			}
+			"PostThink"
+			{
+				"windows"	"274"
+				"linux"		"275"
+			}
+			"SetTransmit"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"17"
+				"linux"		"18"
+			}
+			"Spawn"
+			{
+				"windows"	"23"
+				"linux"		"24"
+			}
+			"StartTouch"
+			{
+				"windows"	"88"
+				"linux"		"89"
+			}
+			"Think"
+			{
+				"windows"	"46"
+				"linux"		"47"
+			}
+			"Touch"
+			{
+				"windows"	"89"
+				"linux"		"90"
+			}
+			"TraceAttack"
+			{
+				"windows"	"58"
+				"linux"		"59"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"222"
+				"linux"		"223"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"216"
+				"linux"		"217"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"219"
+				"linux"		"220"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"217"
+				"linux"		"218"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"220"
+				"linux"		"221"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* OrangeBox Engine */
+	"tf"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"97"
+				"linux"		"98"
+			}
+			"FireBullets"
+			{
+				"windows"	"109"
+				"linux"		"110"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"60"
+				"linux"		"61"
+			}
+			"PreThink"
+			{
+				"windows"	"319"
+				"linux"		"320"
+			}
+			"PostThink"
+			{
+				"windows"	"320"
+				"linux"		"321"
+			}
+			"SetTransmit"
+			{
+				"windows"	"19"
+				"linux"		"20"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"15"
+				"linux"		"16"
+			}
+			"Spawn"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"StartTouch"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"Think"
+			{
+				"windows"	"45"
+				"linux"		"46"
+			}
+			"Touch"
+			{
+				"windows"	"96"
+				"linux"		"97"
+			}
+			"TraceAttack"
+			{
+				"windows"	"58"
+				"linux"		"59"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"102"
+				"linux"		"103"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"254"
+				"linux"		"255"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"248"
+				"linux"		"249"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"251"
+				"linux"		"252"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"249"
+				"linux"		"250"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"252"
+				"linux"		"253"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	"dod"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"97"
+				"linux"		"98"
+			}
+			"FireBullets"
+			{
+				"windows"	"109"
+				"linux"		"110"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"60"
+				"linux"		"61"
+			}
+			"PreThink"
+			{
+				"windows"	"319"
+				"linux"		"320"
+			}
+			"PostThink"
+			{
+				"windows"	"320"
+				"linux"		"321"
+			}
+			"SetTransmit"
+			{
+				"windows"	"19"
+				"linux"		"20"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"15"
+				"linux"		"16"
+			}
+			"Spawn"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"StartTouch"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"Think"
+			{
+				"windows"	"45"
+				"linux"		"46"
+			}
+			"Touch"
+			{
+				"windows"	"96"
+				"linux"		"97"
+			}
+			"TraceAttack"
+			{
+				"windows"	"58"
+				"linux"		"59"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"102"
+				"linux"		"103"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"254"
+				"linux"		"255"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"248"
+				"linux"		"249"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"251"
+				"linux"		"252"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"249"
+				"linux"		"250"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"252"
+				"linux"		"253"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* Empires Mod 2.24d */
+	"empires"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"96"
+				"linux"		"97"
+			}
+			"FireBullets"
+			{
+				"windows"	"108"
+				"linux"		"109"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"61"
+				"linux"		"62"
+			}
+			"PreThink"
+			{
+				"windows"	"291"
+				"linux"		"292"
+			}
+			"PostThink"
+			{
+				"windows"	"292"
+				"linux"		"293"
+			}
+			"SetTransmit"
+			{
+				"windows"	"19"
+				"linux"		"20"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"15"
+				"linux"		"16"
+			}
+			"Spawn"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"StartTouch"
+			{
+				"windows"	"94"
+				"linux"		"95"
+			}
+			"Think"
+			{
+				"windows"	"46"
+				"linux"		"47"
+			}
+			"Touch"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"TraceAttack"
+			{
+				"windows"	"59"
+				"linux"		"60"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"101"
+				"linux"		"102"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"237"
+				"linux"		"238"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"231"
+				"linux"		"232"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"234"
+				"linux"		"235"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"232"
+				"linux"		"233"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"235"
+				"linux"		"236"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x18\x09\x2A\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\xD9\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* Fortress Forever 2.4 */
+	"fortressforever"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"96"
+				"linux"		"97"
+			}
+			"FireBullets"
+			{
+				"windows"	"107"
+				"linux"		"108"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"65"
+				"linux"		"66"
+			}
+			"PreThink"
+			{
+				"windows"	"283"
+				"linux"		"284"
+			}
+			"PostThink"
+			{
+				"windows"	"284"
+				"linux"		"285"
+			}
+			"SetTransmit"
+			{
+				"windows"	"23"
+				"linux"		"24"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"17"
+				"linux"		"18"
+			}
+			"Spawn"
+			{
+				"windows"	"25"
+				"linux"		"26"
+			}
+			"StartTouch"
+			{
+				"windows"	"94"
+				"linux"		"95"
+			}
+			"Think"
+			{
+				"windows"	"51"
+				"linux"		"52"
+			}
+			"Touch"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"TraceAttack"
+			{
+				"windows"	"63"
+				"linux"		"64"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"101"
+				"linux"		"102"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"232"
+				"linux"		"233"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"226"
+				"linux"		"227"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"229"
+				"linux"		"230"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"227"
+				"linux"		"228"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"230"
+				"linux"		"231"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* Insurgency 2.5 */
+	"insurgency"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"84"
+				"linux"		"85"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"53"
+				"linux"		"54"
+			}
+			"PreThink"
+			{
+				"windows"	"189"
+				"linux"		"190"
+			}
+			"PostThink"
+			{
+				"windows"	"190"
+				"linux"		"191"
+			}
+			"SetTransmit"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"17"
+				"linux"		"18"
+			}
+			"Spawn"
+			{
+				"windows"	"22"
+				"linux"		"23"
+			}
+			"StartTouch"
+			{
+				"windows"	"82"
+				"linux"		"83"
+			}
+			"Think"
+			{
+				"windows"	"45"
+				"linux"		"46"
+			}
+			"Touch"
+			{
+				"windows"	"83"
+				"linux"		"84"
+			}
+			"TraceAttack"
+			{
+				"windows"	"52"
+				"linux"		"53"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"89"
+				"linux"		"90"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"213"
+				"linux"		"214"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"216"
+				"linux"		"217"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"220"
+				"linux"		"221"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"215"
+				"linux"		"216"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"217"
+				"linux"		"218"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* The Hidden: Source 4b */
+	"hidden"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"83"
+				"linux"		"84"
+			}
+			"FireBullets"
+			{
+				"windows"	"93"
+				"linux"		"94"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"54"
+				"linux"		"55"
+			}
+			"PreThink"
+			{
+				"windows"	"246"
+				"linux"		"247"
+			}
+			"PostThink"
+			{
+				"windows"	"247"
+				"linux"		"248"
+			}
+			"SetTransmit"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"17"
+				"linux"		"18"
+			}
+			"Spawn"
+			{
+				"windows"	"23"
+				"linux"		"24"
+			}
+			"StartTouch"
+			{
+				"windows"	"81"
+				"linux"		"82"
+			}
+			"Think"
+			{
+				"windows"	"45"
+				"linux"		"46"
+			}
+			"Touch"
+			{
+				"windows"	"82"
+				"linux"		"83"
+			}
+			"TraceAttack"
+			{
+				"windows"	"53"
+				"linux"		"54"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"88"
+				"linux"		"89"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"203"
+				"linux"		"204"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"197"
+				"linux"		"198"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"200"
+				"linux"		"201"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"198"
+				"linux"		"199"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"201"
+				"linux"		"202"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	"left4dead"
+	{
+		"Offsets"
+		{
+			"OnTakeDamage"
+			{
+				"windows"	"62"
+				"linux"		"63"
+			}
+			"EndTouch"
+			{
+				"windows"	"97"
+				"linux"		"98"
+			}
+			"FireBullets"
+			{
+				"windows"	"109"
+				"linux"		"110"
+			}
+			"PreThink"
+			{
+				"windows"	"333"
+				"linux"		"334"
+			}
+			"PostThink"
+			{
+				"windows"	"334"
+				"linux"		"335"
+			}
+			"SetTransmit"
+			{
+				"windows"	"19"
+				"linux"		"20"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"15"
+				"linux"		"16"
+			}
+			"Spawn"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"StartTouch"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"Think"
+			{
+				"windows"	"47"
+				"linux"		"48"
+			}
+			"Touch"
+			{
+				"windows"	"96"
+				"linux"		"97"
+			}
+			"TraceAttack"
+			{
+				"windows"	"60"
+				"linux"		"61"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"102"
+				"linux"		"103"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"265"
+				"linux"		"266"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"259"
+				"linux"		"260"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"262"
+				"linux"		"263"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"260"
+				"linux"		"261"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"263"
+				"linux"		"264"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* Stargate: The Last Stand 1.1 beta */
+	"sgtls"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"92"
+				"linux"		"93"
+			}
+			"FireBullets"
+			{
+				"windows"	"104"
+				"linux"		"105"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"60"
+				"linux"		"61"
+			}
+			"PreThink"
+			{
+				"windows"	"287"
+				"linux"		"288"
+			}
+			"PostThink"
+			{
+				"windows"	"288"
+				"linux"		"289"
+			}
+			"SetTransmit"
+			{
+				"windows"	"19"
+				"linux"		"20"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"15"
+				"linux"		"16"
+			}
+			"Spawn"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"StartTouch"
+			{
+				"windows"	"90"
+				"linux"		"91"
+			}
+			"Think"
+			{
+				"windows"	"45"
+				"linux"		"46"
+			}
+			"Touch"
+			{
+				"windows"	"91"
+				"linux"		"92"
+			}
+			"TraceAttack"
+			{
+				"windows"	"58"
+				"linux"		"59"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"97"
+				"linux"		"98"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"233"
+				"linux"		"234"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"227"
+				"linux"		"228"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"230"
+				"linux"		"231"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"228"
+				"linux"		"229"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"231"
+				"linux"		"232"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* Zombie Master 1.2.1 */
+	"zombie_master"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"90"
+				"linux"		"91"
+			}
+			"FireBullets"
+			{
+				"windows"	"101"
+				"linux"		"102"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"60"
+				"linux"		"61"
+			}
+			"PreThink"
+			{
+				"windows"	"273"
+				"linux"		"274"
+			}
+			"PostThink"
+			{
+				"windows"	"274"
+				"linux"		"275"
+			}
+			"SetTransmit"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"17"
+				"linux"		"18"
+			}
+			"Spawn"
+			{
+				"windows"	"23"
+				"linux"		"24"
+			}
+			"StartTouch"
+			{
+				"windows"	"88"
+				"linux"		"89"
+			}
+			"Think"
+			{
+				"windows"	"46"
+				"linux"		"47"
+			}
+			"Touch"
+			{
+				"windows"	"89"
+				"linux"		"90"
+			}
+			"TraceAttack"
+			{
+				"windows"	"58"
+				"linux"		"59"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"222"
+				"linux"		"223"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"216"
+				"linux"		"217"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"219"
+				"linux"		"220"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"217"
+				"linux"		"218"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"220"
+				"linux"		"221"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	/* Zombic Panic Source 2.0 */
+	"zps"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"95"
+				"linux"		"96"
+			}
+			"FireBullets"
+			{
+				"windows"	"107"
+				"linux"		"108"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"61"
+				"linux"		"62"
+			}
+			"PreThink"
+			{
+				"windows"	"293"
+				"linux"		"294"
+			}
+			"PostThink"
+			{
+				"windows"	"294"
+				"linux"		"295"
+			}
+			"SetTransmit"
+			{
+				"windows"	"19"
+				"linux"		"20"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"15"
+				"linux"		"16"
+			}
+			"Spawn"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"StartTouch"
+			{
+				"windows"	"93"
+				"linux"		"94"
+			}
+			"Think"
+			{
+				"windows"	"46"
+				"linux"		"47"
+			}
+			"Touch"
+			{
+				"windows"	"94"
+				"linux"		"95"
+			}
+			"TraceAttack"
+			{
+				"windows"	"59"
+				"linux"		"60"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"100"
+				"linux"		"101"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"236"
+				"linux"		"237"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"230"
+				"linux"		"231"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"233"
+				"linux"		"234"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"231"
+				"linux"		"232"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"234"
+				"linux"		"235"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	
+	"NeotokyoSource"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"91"
+			}
+			"FireBullets"
+			{
+				"windows"	"102"
+			}
+			"OnTakeDamage"
+			{
+				"windows"	"60"
+			}
+			"PreThink"
+			{
+				"windows"	"274"
+			}
+			"PostThink"
+			{
+				"windows"	"275"
+			}
+			"SetTransmit"
+			{
+				"windows"	"21"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"17"
+			}
+			"Spawn"
+			{
+				"windows"	"23"
+			}
+			"StartTouch"
+			{
+				"windows"	"89"
+			}
+			"Think"
+			{
+				"windows"	"46"
+			}
+			"Touch"
+			{
+				"windows"	"90"
+			}
+			"TraceAttack"
+			{
+				"windows"	"58"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"96"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"223"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"217"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"220"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"218"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"221"
+			}
+		}
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+			}
+		}
+	}
+	
+	"left4dead2"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"108"
+				"linux"		"109"
+			}
+			"FireBullets"
+			{
+				"windows"	"121"
+				"linux"		"122"
+			}
+			"PreThink"
+			{
+				"windows"	"354"
+				"linux"		"355"
+			}
+			"PostThink"
+			{
+				"windows"	"355"
+				"linux"		"356"
+			}
+			"SetTransmit"
+			{
+				"windows"	"21"
+				"linux"		"22"
+			}
+			"ShouldCollide"
+			{
+				"windows"	"17"
+				"linux"		"18"
+			}
+			"Spawn"
+			{
+				"windows"	"23"
+				"linux"		"24"
+			}
+			"StartTouch"
+			{
+				"windows"	"106"
+				"linux"		"107"
+			}
+			"Think"
+			{
+				"windows"	"55"
+				"linux"		"56"
+			}
+			"Touch"
+			{
+				"windows"	"107"
+				"linux"		"108"
+			}
+			"TraceAttack"
+			{
+				"windows"	"69"
+				"linux"		"70"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"114"
+				"linux"		"115"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"284"
+				"linux"		"285"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"278"
+				"linux"		"279"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"281"
+				"linux"		"282"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"279"
+				"linux"		"280"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"282"
+				"linux"		"283"
+			}
+		}
+		
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+				"linux"		"@_Z23EntityFactoryDictionaryv"
+			}
+		}
+	}
+	"garrysmod"
+	{
+		"Offsets"
+		{
+			"EndTouch"
+			{
+				"windows"	"93"
+			}
+			"FireBullets"
+			{
+				"windows"	"105"
+			}
+			"PreThink"
+			{
+				"windows"	"329"
+			}
+			"PostThink"
+			{
+				"windows"	"330"
+			}
+			"SetTransmit"
+			{
+				"windows"	"19"
+			}
+			"Spawn"
+			{
+				"windows"	"21"
+			}
+			"StartTouch"
+			{
+				"windows"	"91"
+			}
+			"Think"
+			{
+				"windows"	"45"
+			}
+			"Touch"
+			{
+				"windows"	"92"
+			}
+			"TraceAttack"
+			{
+				"windows"	"58"
+			}
+			"UpdateOnRemove"
+			{
+				"windows"	"98"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"windows"	"275"
+			}
+			"Weapon_CanUse"
+			{
+				"windows"	"269"
+			}
+			"Weapon_Drop"
+			{
+				"windows"	"272"
+			}
+			"Weapon_Equip"
+			{
+				"windows"	"270"
+			}
+			"Weapon_Switch"
+			{
+				"windows"	"273"
+			}
+		}
+		"Signatures"
+		{
+			"IEntityFactoryDictionary"
+			{
+				"library"	"server"
+				"windows"	"\xB8\x01\x00\x00\x00\x84\x2A\x2A\x2A\x2A\x2A\x75\x1D\x09\x2A\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x04\xB8\x2A\x2A\x2A\x2A\xC3"
+			}
+		}
+	}
+}

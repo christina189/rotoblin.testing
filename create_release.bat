@@ -29,6 +29,7 @@ ROBOCOPY /E "rotoblin_dependencies" "%TEMP_DIR%"
 
 REM Now we need to put the built rotoblin.smx in the correct place.  Note: copy is picky about slashes.
 copy /Y "build\rotoblin.smx" "%TEMP_DIR%\addons\sourcemod\plugins\rotoblin.smx"
+copy /Y "build\l4dready.smx" "%TEMP_DIR%\addons\sourcemod\plugins\l4dready.smx"
 
 REM Finally, zip up the release folder using 7zip
 echo zipping release dir

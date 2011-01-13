@@ -261,14 +261,11 @@ public Action:_P_Unpause_Command(client, const String:command[], args)
 {
 	if (!g_bIsUnpausable) return Plugin_Handled;
 
-	new team = GetClientTeam(client);
-	if (team != TEAM_SURVIVOR && team != TEAM_INFECTED) return Plugin_Handled;
-
 	g_bIsPaused = false;
 	g_bIsUnpausing = false;
 	g_bIsUnpausable = false;
 	ResetPauseRequests();
-	return Plugin_Handled;
+	return Plugin_Continue;
 }
 
 /**
@@ -337,6 +334,13 @@ public Action:_P_RotoblinUnpause_Command(client, const String:command[], args)
 	}
 
 	new teamIndex = GetClientTeam(client);
+
+	if (teamIndex != TEAM_SURVIVOR && teamIndex != TEAM_INFECTED)
+	{
+		PrintToChat(client, "[%s] The game cannot be unpaused by spectators.", PLUGIN_TAG);
+		return Plugin_Handled;
+	}
+
 	decl String:teamName[16];
 	GetTeamNameEx(teamIndex, true, teamName, sizeof(teamName));
 

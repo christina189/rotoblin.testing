@@ -261,11 +261,14 @@ public Action:_P_Unpause_Command(client, const String:command[], args)
 {
 	if (!g_bIsUnpausable) return Plugin_Handled;
 
+	new team = GetClientTeam(client);
+	if (team != TEAM_SURVIVOR && team != TEAM_INFECTED) return Plugin_Handled;
+
 	g_bIsPaused = false;
 	g_bIsUnpausing = false;
 	g_bIsUnpausable = false;
 	ResetPauseRequests();
-	return Plugin_Continue;
+	return Plugin_Handled;
 }
 
 /**

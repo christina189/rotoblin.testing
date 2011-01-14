@@ -17,6 +17,9 @@ mkdir %TEMP_DIR%
 REM Build the .smx file
 echo Calling makefile.bat
 call makefile.bat
+echo Calling makefile_l4dready.bat
+call makefile_l4dready.bat
+
 
 REM Copy all of the required files (dependencies like left4downtown etc.) into a release folder
 REM These are our simple dependencies; things like configs etc.

@@ -1,0 +1,3 @@
+relre:^build/
+relre:^release_temp/
+relre:^rotoblin_release.zip$

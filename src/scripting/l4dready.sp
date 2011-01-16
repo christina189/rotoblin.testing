@@ -226,7 +226,7 @@ public OnAllPluginsLoaded()
 		RegAdminCmd("sm_swapteams", Command_SwapTeams, ADMFLAG_BAN, "sm_swapteams - swap all the players to the opposite teams");
 	}
 	
-	CheckDependencyVersions(/*throw*/true);
+	CheckDependencyVersions(true);
 }
 
 new bool:insidePluginEnd = false;
@@ -568,11 +568,7 @@ public Action:L4D_OnSpawnWitch(const Float:vector[3], const Float:qangle[3])
 
 public Action:Event_TankSpawn(Handle:event, const String:name[], bool:dontBroadcast)
 {
-/*	new tankid = GetEventInt(event, "tankid");
-	new player = GetClientOfUserId(GetEventInt(event, "userid"));
-	
-	new String:curname[128];
-	GetClientName(player,curname,128);*/
+
 }
 
 public Action:Event_WitchSpawn(Handle:event, const String:name[], bool:dontBroadcast)
@@ -670,9 +666,7 @@ public Action:eventVotePassed(Handle:event, const String:name[], bool:dontBroadc
 	GetEventString(event, "details", details, 128);
 	GetEventString(event, "param1", param1, 128);
 	team = GetEventInt(event, "team");
-	
-	//[DEBUG] Vote passed, details=#L4D_vote_passed_restart_game, param1=, team=[-1].
-	
+		
 	DebugPrintToAll("[DEBUG] Vote passed, details=%s, param1=%s, team=[%d].", details, param1, team);
 	
 	return Plugin_Handled;
@@ -689,9 +683,7 @@ public Action:eventVoteStarted(Handle:event, const String:name[], bool:dontBroad
 	GetEventString(event, "param1", param1, 128);
 	team = GetEventInt(event, "team");
 	initiator = GetEventInt(event, "initiator");
-	
-	//[DEBUG] Vote started, issue=#L4D_vote_restart_game, param1=, team=[-1], initiator=[1].
-	
+			
 	DebugPrintToAll("[DEBUG] Vote started, issue=%s, param1=%s, team=[%d], initiator=[%d].", issue, param1, team, initiator);
 }
 
@@ -1152,37 +1144,7 @@ DrawReadyPanelList()
 	{
 		if(IsClientInGameHuman(i)) 
 		{
-			SendPanelToClient(panel, i, Menu_ReadyPanel, READY_LIST_PANEL_LIFETIME);
-			
-			/*
-			//some other menu was open during this time?
-			if(menuInterrupted[i])
-			{
-				//if the menu is still up, dont refresh
-				if(GetClientMenu(i))
-				{
-					DebugPrintToAll("MENU: Will not draw to %N, has menu open (and its not ours)", i);
-					continue;
-				}
-				else
-				{
-					menuInterrupted[i] = false;
-				}
-			}
-			//send to client if he doesnt have menu already
-			//this menu will be refreshed automatically from timeout callback
-			if(!GetClientMenu(i))
-				SendPanelToClient(panel, i, Menu_ReadyPanel, READY_LIST_PANEL_LIFETIME);
-			else
-				DebugPrintToAll("MENU: Will not draw to %N, has menu open (and it could be ours)", i);
-			*/
-			
-			/*
-			#if READY_DEBUG
-			PrintToChat(i, "[DEBUG] You have been sent the Panel.");
-			#endif
-			*/
-			
+			SendPanelToClient(panel, i, Menu_ReadyPanel, READY_LIST_PANEL_LIFETIME);			
 		}
 	}
 	
@@ -1201,34 +1163,8 @@ public Action:readyDraw(client, args)
 
 public Menu_ReadyPanel(Handle:menu, MenuAction:action, param1, param2) 
 { 
-	/*
-	if(!readyMode)
-	{
-		return;
-	}
-	
-	if (action == MenuAction_Cancel) {
-		new reason = param2;
-		new client = param1;
 
-		//some other menu was opened, dont refresh
-		if(reason == MenuCancel_Interrupted)
-		{
-			DebugPrintToAll("MENU: Ready menu was interrupted");
-			menuInterrupted[client] = true;
-		}
-		//usual timeout, refresh the menu
-		else if(reason == MenuCancel_Timeout)
-		{
-			DebugPrintToAll("MENU: Ready menu timed out, refreshing");
-			SendPanelToClient(menuPanel, client, Menu_ReadyPanel, READY_LIST_PANEL_LIFETIME);
-		}
-	}*/
-	
 }
-
-
-
 
 //thanks to Liam for helping me figure out from the disassembly what the server's director_stop does
 directorStop()
@@ -1279,11 +1215,7 @@ readyOn()
 	readyMode = true;
 	
 	PrintHintTextToAll("Ready mode on.\nSay !ready to ready up or !unready to unready.");
-	/*if (!hookedSpawnReady) 
-	{
-	HookEvent("player_spawn", eventSpawnReadyCallback);
-	hookedSpawnReady = 1;
-	}*/
+	
 	if(!hookedPlayerHurt) 
 	{
 		HookEvent("player_hurt", eventPlayerHurt);
@@ -1356,10 +1288,7 @@ UnfreezeAllPlayers()
 			DebugPrintToAll("[DEBUG] Unfreezing %s [%d] during UnfreezeAllPlayers().", curname, i);
 			#endif
 			
-			//if(GetClientTeam(i) != L4D_TEAM_SPECTATE)
-				ToggleFreezePlayer(i, false);
-			/*else
-				SetEntityMoveType(i, MOVETYPE_OBSERVER);*/
+			ToggleFreezePlayer(i, false);			
 		}
 	}
 }
@@ -1438,18 +1367,7 @@ public Action:compStart(client, args)
 
 //restart the map when we toggle the cvar
 public ConVarChange_ReadyEnabled(Handle:convar, const String:oldValue[], const String:newValue[])
-{	
-	/*if(!IsSourcemodVersionValid())
-	{
-		PrintToChatAll("Your SourceMod version is out of date, please upgrade to 1.2.1 stable");
-		return;
-	}
-	if(!IsLeft4DowntownVersionValid())
-	{
-		PrintToChatAll("Your Left 4 Downtown Extension is out of date, please upgrade to 0.3.0 or later");
-		return;
-	}*/
-	
+{		
 	if (oldValue[0] == newValue[0])
 	{
 		return;
@@ -1670,8 +1588,7 @@ public Action:Command_DumpGameRules(client,args)
 				
 				DebugPrintToAll("Team #%d, score = %d, name = %s", teamNumber, score, teamName);
 			}
-		}
-		
+		}		
 	}
 	
 	return Plugin_Handled;
@@ -1703,8 +1620,7 @@ public Action:Command_ScanProperties(client, args)
 		DebugPrintToAll("Failed to find terror_gamerules edict");
 		return Plugin_Handled;
 	}
-	
-	
+		
 	new i;
 	new value = -1;
 	for(i = 100; i < 1000; i += step)
@@ -2084,7 +2000,7 @@ bool:IsLeft4DowntownVersionValid()
 ParseVersionNumber(const String:versionText[])
 {
 	new String:versionNumbers[4][4];
-	ExplodeString(versionText, /*split*/".", versionNumbers, 4, 4);
+	ExplodeString(versionText, ".", versionNumbers, 4, 4);
 	
 	new version = 0;
 	new shift = 24;

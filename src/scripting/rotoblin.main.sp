@@ -107,6 +107,7 @@
 #include "rotoblin.weaponcontrol.sp"
 #include "rotoblin.pumpswap.sp"
 #include "rotoblin.limithuntingrifle.sp"
+#include "rotoblin.finalespawn.sp"
 
 // --------------------
 //       Private
@@ -203,6 +204,7 @@ public OnPluginStartEx()
 	_LimitHuntingRifl_OnPluginStart();
 	_ItemControl_OnPluginStart();
 	_MeleeFatigue_OnPluginStart();
+	_FinaleSpawn_OnPluginStart();
 
 	// Create cvar for control plugin state
 	Format(buffer, sizeof(buffer), "Sets whether %s is enabled", PLUGIN_FULLNAME);

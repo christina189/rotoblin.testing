@@ -53,7 +53,7 @@
 #define PLUGIN_SHORTNAME		"rotoblin"							// Shorter version of the full name, used in file paths, and other things
 #define PLUGIN_AUTHOR			"Rotoblin Team"						// Author of the plugin
 #define PLUGIN_DESCRIPTION		"A competitive mod for L4D"			// Description of the plugin
-#define PLUGIN_VERSION			"0.8.0"								// http://wiki.eclipse.org/Version_Numbering
+#define PLUGIN_VERSION			"0.8.1"								// http://wiki.eclipse.org/Version_Numbering
 #define PLUGIN_URL				"http://rotoblin.googlecode.com/"	// URL associated with the project
 #define PLUGIN_CVAR_PREFIX		PLUGIN_SHORTNAME				// Prefix for cvars
 #define PLUGIN_CMD_PREFIX		PLUGIN_SHORTNAME				// Prefix for cmds

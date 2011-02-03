@@ -1137,7 +1137,7 @@ DrawReadyPanelList()
 	DrawPanelText(panel, versionInfo);
 	
 #if LEAGUE_ADD_NOTICE
-	DrawPanelText(panel,     "Rotoblin v0.8.0");
+	DrawPanelText(panel,     "Rotoblin v0.8.1");
 #endif
 	
 	for (i = 1; i < L4D_MAXCLIENTS_PLUS1; i++) 

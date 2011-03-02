@@ -93,6 +93,7 @@ static bool:FinaleFix_Check(Float:vec[3])
 	if (FinaleFix_DeathToll(map, vec)) return true; // Death Toll finale fix applied, return true
 	if (FinaleFix_BloodHarvest(map, vec)) return true; // Blood Harvest finale fix applied, return true
 	if (FinaleFix_CrashCourse(map, vec)) return true; // Crash Course finale fix applied, return true
+	if (FinaleFix_SuicideBiltz(map, vec)) return true; // Suicide Biltz finale fix applied, return true
 
 	return false;
 }
@@ -165,6 +166,24 @@ static bool:FinaleFix_CrashCourse(const String:map[], Float:vec[3])
 	vec[0] = 7132.0;
 	vec[1] = 6474.0;
 	vec[2] = 107.0;
+
+	return true;
+}
+
+/**
+ * Finale fix for Suicide Biltz.
+ *
+ * @prama map			Current map string.
+ * @prama vec			Vector buffer to store origin in.
+ * @return				True if got coordinates for finale, false otherwise.
+ */
+static bool:FinaleFix_SuicideBiltz(const String:map[], Float:vec[3])
+{
+	if (!StrEqual(map, "l4d_vs_stadium5_stadium")) return false;
+
+	vec[0] = 795.0;
+	vec[1] = 3625.0;
+	vec[2] = 167.0;
 
 	return true;
 }

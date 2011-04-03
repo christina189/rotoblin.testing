@@ -165,7 +165,7 @@ public Action:_SB_ShowHud_Command(client, const String:command[], argc)
 	GetClientAuthString(client, auth, sizeof(auth)); // Get steam id
 	SetTrieValue(g_hClientSettings, auth, int:g_bShowHUD[client], true); // Store settings
 
-	PrintToChat(client, "[%s] Spectator HUD is now %s.", PLUGIN_TAG, (g_bShowHUD[client] ? "disabled" : "enabled"));
+	PrintToChat(client, "[%s] Spectator HUD is now %s.", PLUGIN_TAG, (g_bShowHUD[client] ? "enabled" : "disabled"));
 
 	return Plugin_Handled;
 }

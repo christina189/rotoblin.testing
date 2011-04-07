@@ -336,13 +336,25 @@
 				"windows" "\x74\x2A\x8B\x54\x2A\x2A\x8B\x06\x8B\x7A\x2A\x8B\x50\x2A\x8B\xCE\xFF\xD2\x2B\xF8\x8B\x06\x8B\x50\x2A\x8B\xCE\xFF\xD2\x03\xC7"
 					/* 74 ?  8B 54 ?  ?  8B 06 8B 7A ?  8B 50 ?  8B CE FF D2 2B F8 8B 06 8B 50 ?  8B CE FF D2 03 C7 */			
 			}
-			
-			
+
+			/*
+			* int CBaseServer::GetMasterServerPlayerCounts(int &, int &, int &)
+			* 
+			* Used to override server browser maxplayers reporting (Windows)
+			*/
+			"GetMasterServerPlayerCounts"
+			{
+				"library" "engine"
+				"linux" "@_ZN11CBaseServer27GetMasterServerPlayerCountsERiS0_S0_"
+				"windows" "\x56\x8B\xF1\xE8\x2A\x2A\x2A\x2A\x8B\x4C\x24\x08\x89\x01\x8B\x0D\x2A\x2A\x2A\x2A\x85\xC9\x74\x2A\x8B\x11\x8B\x42\x48"
+
+			}	
+
 			/* Not an actual function,
 			   This rejects players when there are all full human players
 			   
 			   string "Human player limit reached (%d/%d)"
-			   */
+			*/
 			"HumanPlayerLimitReached"
 			{
 				"library"	"server"

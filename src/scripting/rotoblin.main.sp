@@ -108,6 +108,7 @@
 #include "rotoblin.pumpswap.sp"
 #include "rotoblin.limithuntingrifle.sp"
 #include "rotoblin.finalespawn.sp"
+#include "rotoblin.survivorexploitfixes.sp"
 
 // --------------------
 //       Private
@@ -183,7 +184,7 @@ public OnPluginStartEx()
 	_H_TankManager_OnPluginStart();
 	_H_ClientIndexes_OnPluginStart();
 	_H_CommandManager_OnPluginStart();
-
+	
 	_AutoUpdate_OnPluginStart();
 	_HealthControl_OnPluginStart();
 	_WeaponControl_OnPluginStart();
@@ -205,7 +206,8 @@ public OnPluginStartEx()
 	_ItemControl_OnPluginStart();
 	_MeleeFatigue_OnPluginStart();
 	_FinaleSpawn_OnPluginStart();
-
+	_SurvExploitFixes_OnPluginStart();
+	
 	// Create cvar for control plugin state
 	Format(buffer, sizeof(buffer), "Sets whether %s is enabled", PLUGIN_FULLNAME);
 	convar = CreateConVarEx("enable", "0", buffer, FCVAR_PLUGIN | FCVAR_NOTIFY);
